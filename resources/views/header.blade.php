@@ -12,6 +12,7 @@
     <nav class="nav-right">
         @auth
             <a href="{{ route('perfil') }}">{{ Auth::user()->username }}</a>
+            <a href="#">Carrito</a>
         @else
             <a href="{{ route('login') }}">Login</a>
             <a href="{{ route('register') }}">Registro</a>

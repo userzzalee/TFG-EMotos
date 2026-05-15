@@ -8,14 +8,14 @@
 </head>
 <body>
 
-@include('partials.header')
+@include('layouts.navigation')
 
 <main>
     <div class="recuadro perfil">
         <img src="{{ asset('assets/photo/plato6.png') }}" alt="foto perfil">
         <hr>
-        <h3>{{ $user->username }}</h3>
-        <p>{{ $user->email }}</p>
+        <h3>{{ Auth::user()->name }}</h3>
+        <p>{{ Auth::user()->email }}</p>
         <br>
 
         <form method="POST" action="{{ route('logout') }}">
