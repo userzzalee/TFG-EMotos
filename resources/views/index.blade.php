@@ -26,15 +26,7 @@
     </div>
 
     <div class="fixed bottom-10 left-0 w-full flex justify-center gap-3">
-        <button class="bg-[rgb(224,224,224)] rounded-[20px] w-[150px] py-[10px] border-none cursor-pointer transition-all duration-200 hover:scale-105 hover:bg-[rgb(200,200,200)]">
-            <a href="#" class="no-underline text-black block w-full h-full">Supermotard</a>
-        </button>
-        <button class="bg-[rgb(224,224,224)] rounded-[20px] w-[150px] py-[10px] border-none cursor-pointer transition-all duration-200 hover:scale-105 hover:bg-[rgb(200,200,200)]">
-            <a href="#" class="no-underline text-black block w-full h-full">Motocross</a>
-        </button>
-        <button class="bg-[rgb(224,224,224)] rounded-[20px] w-[150px] py-[10px] border-none cursor-pointer transition-all duration-200 hover:scale-105 hover:bg-[rgb(200,200,200)]">
-            <a href="#" class="no-underline text-black block w-full h-full">Enduro</a>
-        </button>
+        <a href="{{ route('configurador') }}" class="bg-[rgb(224,224,224)] rounded-[20px] w-[150px] py-[10px] border-none cursor-pointer transition-all duration-200 hover:scale-105 hover:bg-[rgb(200,200,200)] no-underline text-black block text-center">Configura tu moto</a>
     </div>
 </main>
 

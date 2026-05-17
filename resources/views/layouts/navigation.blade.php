@@ -4,9 +4,9 @@
 
     {{-- Nav izquierda --}}
     <div class="flex items-center gap-5">
-        <a href="#" class="text-[#ddd] no-underline text-[14px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Supermotard</a>
-        <a href="#" class="text-[#ddd] no-underline text-[14px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Motocross</a>
-        <a href="#" class="text-[#ddd] no-underline text-[14px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Enduro</a>
+        <a href="#" class="text-[#ddd] no-underline text-[14px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Taller</a>
+        <a href="#" class="text-[#ddd] no-underline text-[14px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Merchdasing</a>
+        <a href="#" class="text-[#ddd] no-underline text-[14px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Repuestos</a>
     </div>
 
     {{-- Centro: logo --}}

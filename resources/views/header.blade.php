@@ -1,8 +1,8 @@
 <header class="header">
     <nav class="nav-left">
-        <a href="#">Supermotard</a>
-        <a href="#">Motocross</a>
-        <a href="#">Enduro</a>
+        <a href="#">Taller</a>
+        <a href="#">Merchandising</a>
+        <a href="#">Repuestos</a>
     </nav>
 
     <div class="nav-center">

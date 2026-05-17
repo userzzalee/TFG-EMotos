@@ -37,5 +37,12 @@
             </a>
         </div>
 
+        <div class="mt-4">
+            <a href="{{ url('/') }}"
+                class="text-gray-400 no-underline hover:text-white transition-colors">
+                Volver al inicio
+            </a>
+        </div>
+
     </div>
 </x-guest-layout>

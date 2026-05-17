@@ -18,5 +18,9 @@ Route::get('/perfil', function () {
     return view('perfil');
 })->middleware('auth')->name('perfil');
 
+Route::get('/configurador', function () {
+    return view('configurador');
+})->name('configurador');
+
 
 require __DIR__.'/auth.php';
