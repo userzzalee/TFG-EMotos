@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Configura tu Moto - Club Motos</title>
+    <title>Configura tu Moto - Alyx</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="{{ asset('js/configurador.js') }}" defer></script>
 </head>

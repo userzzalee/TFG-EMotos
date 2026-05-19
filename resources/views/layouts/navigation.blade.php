@@ -5,13 +5,13 @@
     {{-- Nav izquierda --}}
     <div class="flex items-center gap-5">
         <a href="#" class="text-[#ddd] no-underline text-[14px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Taller</a>
-        <a href="#" class="text-[#ddd] no-underline text-[14px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Merchdasing</a>
+        <a href="{{ route('merchandising') }}" class="text-[#ddd] no-underline text-[14px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Merchandising</a>
         <a href="#" class="text-[#ddd] no-underline text-[14px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Repuestos</a>
     </div>
 
     {{-- Centro: logo --}}
     <div class="justify-self-center">
-        <a href="{{ url('/') }}" class="text-white font-bold text-[16px] no-underline tracking-widest">CLUB MOTOS</a>
+        <a href="{{ url('/') }}" class="text-white font-bold text-[28px] no-underline tracking-widest">Aly<span class="text-[#f0c36d]">X</span></a>
     </div>
 
     {{-- Nav derecha --}}

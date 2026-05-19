@@ -1,0 +1,15 @@
+/* ===== Recuadro interior ====== */
+
+.recuadro{
+    background-color: #1e1f29;
+    border-radius: 20px;
+    text-align: center;
+    padding: 20px;
+    margin: auto;
+    margin-top: 160px;
+    width: 40%;
+    color: #e6e6f0;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
+    max-width: 40%;
+    max-height: 60%;
+}

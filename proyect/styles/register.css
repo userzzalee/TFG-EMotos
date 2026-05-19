@@ -1,0 +1,76 @@
+/* ===== Recuadro interior ====== */
+
+body{
+    background-color: #3a3a45;
+}
+
+/* ===== Recuadro interior ====== */
+
+.recuadro{
+    background-color: #1e1f29;
+    border-radius: 20px;
+    text-align: center;
+    padding: 20px;
+    margin: auto;
+    margin-top: 100px;
+    width: 40%;
+    color: #e6e6f0;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
+}
+
+/* ===== Titulo ====== */
+
+.titulo{
+    margin: 17px;
+    color: #c9b37e;
+}
+
+/* ===== Formulario ====== */
+
+form{
+    padding: 1px;
+}
+
+/* ===== Correo y Contraseña ====== */
+
+input{
+    background-color: #3a3a45;
+    color: rgba(255, 255, 255, 0.84);
+    width: 90%;
+    height: 50px;
+    margin: 10px auto;
+    border-radius: 20px;
+    border: none;
+    padding: 10px 20px;
+}
+
+/* ===== Boton ====== */
+
+.iniciaRegister{
+    width: 200px;
+    height: 40px;
+    border-radius: 30px;
+    background-color: #c9b37e;
+    color: #1e1f29;
+    text-decoration: none;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: none;
+}
+
+.iniciaRegister:hover{
+    background-color: #e0c97a;
+}
+
+/* ===== Links ====== */
+
+.regi, .olvido{
+    color: #c9b37e;
+    text-decoration: none;
+}
+
+.regi:hover, .olvido:hover{
+    color: #e0c97a;
+    text-decoration: underline;
+}
