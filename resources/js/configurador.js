@@ -36,7 +36,7 @@ function selectModel(model) {
     }
     
     // Update button styles
-    document.querySelectorAll('.model-btn').forEach(btn => {
+    document.querySelectorAll('.modelos').forEach(btn => {
         btn.classList.remove('bg-yellow-500', 'border-yellow-500', 'text-black');
         btn.classList.add('bg-gray-800', 'border-gray-700', 'text-white');
     });
@@ -64,7 +64,7 @@ function selectColor(color) {
     }
     
     // Update button styles
-    document.querySelectorAll('.color-btn').forEach(btn => {
+    document.querySelectorAll('.colores').forEach(btn => {
         btn.classList.remove('border-yellow-500', 'scale-110');
     });
     
@@ -85,7 +85,7 @@ function selectEngine(engine) {
     }
     
     // Update button styles
-    document.querySelectorAll('.engine-btn').forEach(btn => {
+    document.querySelectorAll('.tiposmotores').forEach(btn => {
         btn.classList.remove('bg-yellow-500', 'border-yellow-500', 'text-black');
         btn.classList.add('bg-gray-800', 'border-gray-700', 'text-white');
     });

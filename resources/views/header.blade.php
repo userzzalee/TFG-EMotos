@@ -6,7 +6,7 @@
     </nav>
 
     <div class="nav-center">
-        <a href="{{ url('/') }}" class="home-btn">Alyx</a>
+        <a href="{{ url('/') }}" class="btn-inicio">Alyx</a>
     </div>
 
     <nav class="nav-right">

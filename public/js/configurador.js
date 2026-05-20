@@ -1,21 +1,21 @@
-let selectedModel = 'sport';
-let selectedColor = 'negro';
-let selectedEngine = '250';
-let currentSection = 'modelo';
+let modeloSeleccionado = 'sport';
+let colorSeleccionado = 'negro';
+let motorSeleccionado = '250';
+let seccionActual = 'modelo';
 
-const sections = ['modelo', 'color', 'motor', 'resumen'];
-const prices = {
+const secciones = ['modelo', 'color', 'motor', 'resumen'];
+const precios = {
     sport: { base: 4999 },
     cruiser: { base: 5999 }
 };
 
-const enginePrices = {
+const preciosMotores = {
     '250': 0,
     '500': 1000,
     '1000': 2500
 };
 
-const colorNames = {
+const nombresColores = {
     'negro': 'Negro',
     'dorado': 'Dorado',
     'gris': 'Gris',
@@ -26,7 +26,7 @@ let touchStartY = 0;
 let touchEndY = 0;
 
 function selectModel(model) {
-    selectedModel = model;
+    modeloSeleccionado = model;
     
     const motoName = document.getElementById('moto-name');
     const summaryModel = document.getElementById('summary-model');
@@ -39,7 +39,7 @@ function selectModel(model) {
     }
     
     // Update button styles
-    document.querySelectorAll('.model-btn').forEach(btn => {
+    document.querySelectorAll('.modelos').forEach(btn => {
         btn.classList.remove('bg-yellow-500', 'border-yellow-500', 'text-black');
         btn.classList.add('bg-gray-800', 'border-gray-700', 'text-white');
     });
@@ -54,20 +54,20 @@ function selectModel(model) {
 }
 
 function selectColor(color) {
-    selectedColor = color;
+    colorSeleccionado = color;
     
     const motoColorName = document.getElementById('moto-color-name');
     const summaryColor = document.getElementById('summary-color');
     
     if (motoColorName) {
-        motoColorName.textContent = colorNames[color];
+        motoColorName.textContent = nombresColores[color];
     }
     if (summaryColor) {
-        summaryColor.textContent = colorNames[color];
+        summaryColor.textContent = nombresColores[color];
     }
     
     // Update button styles
-    document.querySelectorAll('.color-btn').forEach(btn => {
+    document.querySelectorAll('.colores').forEach(btn => {
         btn.classList.remove('border-yellow-500', 'scale-110');
     });
     
@@ -80,7 +80,7 @@ function selectColor(color) {
 }
 
 function selectEngine(engine) {
-    selectedEngine = engine;
+    motorSeleccionado = engine;
     
     const summaryEngine = document.getElementById('summary-engine');
     if (summaryEngine) {
@@ -88,7 +88,7 @@ function selectEngine(engine) {
     }
     
     // Update button styles
-    document.querySelectorAll('.engine-btn').forEach(btn => {
+    document.querySelectorAll('.tiposmotores').forEach(btn => {
         btn.classList.remove('bg-yellow-500', 'border-yellow-500', 'text-black');
         btn.classList.add('bg-gray-800', 'border-gray-700', 'text-white');
     });
@@ -103,8 +103,8 @@ function selectEngine(engine) {
 }
 
 function updatePrice() {
-    const basePrice = prices[selectedModel].base;
-    const enginePrice = enginePrices[selectedEngine];
+    const basePrice = precios[modeloSeleccionado].base;
+    const enginePrice = preciosMotores[motorSeleccionado];
     const total = basePrice + enginePrice;
     
     const totalPriceEl = document.getElementById('total-price');
@@ -114,13 +114,13 @@ function updatePrice() {
 }
 
 function goToSection(sectionName) {
-    const currentIndex = sections.indexOf(currentSection);
-    const newIndex = sections.indexOf(sectionName);
+    const currentIndex = secciones.indexOf(seccionActual);
+    const newIndex = secciones.indexOf(sectionName);
     
     if (newIndex === -1 || newIndex === currentIndex) return;
     
     // Hide all sections
-    sections.forEach((section) => {
+    secciones.forEach((section) => {
         const el = document.getElementById(`section-${section}`);
         if (el) {
             el.classList.add('hidden');
@@ -133,26 +133,26 @@ function goToSection(sectionName) {
         targetEl.classList.remove('hidden');
     }
     
-    currentSection = sectionName;
+    seccionActual = sectionName;
     updateNavigation();
 }
 
 function nextSection() {
-    const currentIndex = sections.indexOf(currentSection);
-    if (currentIndex < sections.length - 1) {
-        goToSection(sections[currentIndex + 1]);
+    const currentIndex = secciones.indexOf(seccionActual);
+    if (currentIndex < secciones.length - 1) {
+        goToSection(secciones[currentIndex + 1]);
     }
 }
 
 function prevSection() {
-    const currentIndex = sections.indexOf(currentSection);
+    const currentIndex = secciones.indexOf(seccionActual);
     if (currentIndex > 0) {
-        goToSection(sections[currentIndex - 1]);
+        goToSection(secciones[currentIndex - 1]);
     }
 }
 
 function updateNavigation() {
-    const currentIndex = sections.indexOf(currentSection);
+    const currentIndex = secciones.indexOf(seccionActual);
     
     // Update prev button
     const prevBtn = document.getElementById('prev-btn');
@@ -163,7 +163,7 @@ function updateNavigation() {
     // Update next button text
     const nextBtn = document.getElementById('next-btn');
     if (nextBtn) {
-        if (currentIndex === sections.length - 1) {
+        if (currentIndex === secciones.length - 1) {
             nextBtn.textContent = 'Finalizar';
         } else {
             nextBtn.textContent = 'Siguiente →';
@@ -171,7 +171,7 @@ function updateNavigation() {
     }
     
     // Update step indicators
-    sections.forEach((section, index) => {
+    secciones.forEach((section, index) => {
         const stepEl = document.getElementById(`step-${index + 1}`);
         if (stepEl) {
             if (index === currentIndex) {
@@ -206,11 +206,11 @@ document.addEventListener('DOMContentLoaded', function() {
 function handleScroll(e) {
     if (isScrolling) return;
     
-    const currentIndex = sections.indexOf(currentSection);
+    const currentIndex = secciones.indexOf(seccionActual);
     
-    if (e.deltaY > 50 && currentIndex < sections.length - 1) {
+    if (e.deltaY > 50 && currentIndex < secciones.length - 1) {
         isScrolling = true;
-        goToSection(sections[currentIndex + 1]);
+        goToSection(secciones[currentIndex + 1]);
         
         // Reset after delay
         clearTimeout(scrollTimeout);
@@ -219,7 +219,7 @@ function handleScroll(e) {
         }, 1000);
     } else if (e.deltaY < -50 && currentIndex > 0) {
         isScrolling = true;
-        goToSection(sections[currentIndex - 1]);
+        goToSection(secciones[currentIndex - 1]);
         
         // Reset after delay
         clearTimeout(scrollTimeout);
@@ -239,16 +239,16 @@ function handleTouchEnd(e) {
 }
 
 function handleSwipe() {
-    const currentIndex = sections.indexOf(currentSection);
+    const currentIndex = secciones.indexOf(seccionActual);
     const diff = touchStartY - touchEndY;
     
     if (Math.abs(diff) > 50) {
-        if (diff > 0 && currentIndex < sections.length - 1) {
+        if (diff > 0 && currentIndex < secciones.length - 1) {
             // Swipe up - go to next section
-            goToSection(sections[currentIndex + 1]);
+            goToSection(secciones[currentIndex + 1]);
         } else if (diff < 0 && currentIndex > 0) {
             // Swipe down - go to previous section
-            goToSection(sections[currentIndex - 1]);
+            goToSection(secciones[currentIndex - 1]);
         }
     }
 }

@@ -15,72 +15,72 @@
 
 <main class="relative z-10 text-white h-screen flex">
     
-    <!-- Panel izquierdo - Imagen grande -->
+    <!--Panel imagen-->
     <div class="w-2/3 h-full flex items-center justify-center p-0">
         <div id="moto-preview" class="w-full h-full flex items-center justify-center transition-all duration-500">
             <img id="moto-emoji" src="{{ asset('images/moto1.jpg') }}" alt="Moto" class="w-full h-full object-contain transition-all duration-300">
         </div>
     </div>
     
-    <!-- Panel derecho - Opciones -->
+    <!-- Panel derecho-->
     <div id="options-panel" class="w-1/3 h-full bg-black/80 backdrop-blur-xl border-l border-gray-800 overflow-hidden relative flex flex-col">
         
-        <!-- Contenido de secciones -->
+        <!-- Contenido de tipo motores -->
         <div class="flex-1 overflow-y-auto p-8 flex items-center">
             
-            <!-- Sección Modelo -->
-            <div id="section-modelo" class="category-section w-full">
+            <!-- Seccion de los modelo -->
+            <div id="section-modelo" class="tipomotos w-full">
                 <h1 class="text-3xl font-semibold mb-2 text-yellow-500 text-center">Configura tu Moto</h1>
                 <p class="text-gray-400 mb-8 text-center">Elige tu modelo</p>
                 
                 <div class="space-y-3">
-                    <button onclick="selectModel('sport')" class="model-btn w-full bg-gray-800 text-white rounded-xl py-4 px-6 text-left hover:bg-gray-700 transition-all border border-gray-700" data-model="sport">
+                    <button onclick="selectModel('sport')" class="modelos w-full bg-gray-800 text-white rounded-xl py-4 px-6 text-left hover:bg-gray-700 transition-all border border-gray-700" data-model="sport">
                         <span class="font-medium">Sport</span>
                         <span class="text-gray-400 text-sm block mt-1">Diseño aerodinámico</span>
                     </button>
-                    <button onclick="selectModel('cruiser')" class="model-btn w-full bg-gray-800 text-white rounded-xl py-4 px-6 text-left hover:bg-gray-700 transition-all border border-gray-700" data-model="cruiser">
+                    <button onclick="selectModel('cruiser')" class="modelos w-full bg-gray-800 text-white rounded-xl py-4 px-6 text-left hover:bg-gray-700 transition-all border border-gray-700" data-model="cruiser">
                         <span class="font-medium">Cruiser</span>
                         <span class="text-gray-400 text-sm block mt-1">Estilo clásico</span>
                     </button>
                 </div>
             </div>
             
-            <!-- Sección Color -->
-            <div id="section-color" class="category-section hidden w-full">
+            <!-- Seccion de los colores -->
+            <div id="section-color" class="tipomotos hidden w-full">
                 <h2 class="text-2xl font-semibold mb-2 text-yellow-500 text-center">Color</h2>
                 <p class="text-gray-400 mb-8 text-center">Elige el color de tu moto</p>
                 
                 <div class="flex gap-4 justify-center">
-                    <button onclick="selectColor('negro')" class="color-btn w-16 h-16 rounded-full bg-gray-900 hover:scale-110 transition-transform border-2 border-transparent hover:border-yellow-500" data-color="negro"></button>
-                    <button onclick="selectColor('dorado')" class="color-btn w-16 h-16 rounded-full bg-yellow-500 hover:scale-110 transition-transform border-2 border-transparent hover:border-yellow-500" data-color="dorado"></button>
-                    <button onclick="selectColor('gris')" class="color-btn w-16 h-16 rounded-full bg-gray-600 hover:scale-110 transition-transform border-2 border-transparent hover:border-yellow-500" data-color="gris"></button>
-                    <button onclick="selectColor('blanco')" class="color-btn w-16 h-16 rounded-full bg-white hover:scale-110 transition-transform border-2 border-transparent hover:border-yellow-500" data-color="blanco"></button>
+                    <button onclick="selectColor('negro')" class="colores w-16 h-16 rounded-full bg-gray-900 hover:scale-110 transition-transform border-2 border-transparent hover:border-yellow-500" data-color="negro"></button>
+                    <button onclick="selectColor('dorado')" class="colores w-16 h-16 rounded-full bg-yellow-500 hover:scale-110 transition-transform border-2 border-transparent hover:border-yellow-500" data-color="dorado"></button>
+                    <button onclick="selectColor('gris')" class="colores w-16 h-16 rounded-full bg-gray-600 hover:scale-110 transition-transform border-2 border-transparent hover:border-yellow-500" data-color="gris"></button>
+                    <button onclick="selectColor('blanco')" class="colores w-16 h-16 rounded-full bg-white hover:scale-110 transition-transform border-2 border-transparent hover:border-yellow-500" data-color="blanco"></button>
                 </div>
             </div>
             
-            <!-- Sección Motor -->
-            <div id="section-motor" class="category-section hidden w-full">
+            <!-- Seccion del motor -->
+            <div id="section-motor" class="tipomotos hidden w-full">
                 <h2 class="text-2xl font-semibold mb-2 text-yellow-500 text-center">Motor</h2>
                 <p class="text-gray-400 mb-8 text-center">Elige la potencia</p>
                 
                 <div class="space-y-3">
-                    <button onclick="selectEngine('250')" class="engine-btn w-full bg-gray-800 text-white rounded-xl py-4 px-6 text-left hover:bg-gray-700 transition-all border border-gray-700" data-engine="250">
+                    <button onclick="selectEngine('250')" class="tiposmotores w-full bg-gray-800 text-white rounded-xl py-4 px-6 text-left hover:bg-gray-700 transition-all border border-gray-700" data-engine="250">
                         <span class="font-medium">250cc</span>
                         <span class="text-gray-400 text-sm block mt-1">Estándar</span>
                     </button>
-                    <button onclick="selectEngine('500')" class="engine-btn w-full bg-gray-800 text-white rounded-xl py-4 px-6 text-left hover:bg-gray-700 transition-all border border-gray-700" data-engine="500">
+                    <button onclick="selectEngine('500')" class="tiposmotores w-full bg-gray-800 text-white rounded-xl py-4 px-6 text-left hover:bg-gray-700 transition-all border border-gray-700" data-engine="500">
                         <span class="font-medium">500cc</span>
                         <span class="text-gray-400 text-sm block mt-1">Potencia media</span>
                     </button>
-                    <button onclick="selectEngine('1000')" class="engine-btn w-full bg-gray-800 text-white rounded-xl py-4 px-6 text-left hover:bg-gray-700 transition-all border border-gray-700" data-engine="1000">
+                    <button onclick="selectEngine('1000')" class="tiposmotores w-full bg-gray-800 text-white rounded-xl py-4 px-6 text-left hover:bg-gray-700 transition-all border border-gray-700" data-engine="1000">
                         <span class="font-medium">1000cc</span>
                         <span class="text-gray-400 text-sm block mt-1">Alta potencia</span>
                     </button>
                 </div>
             </div>
             
-            <!-- Sección Resumen -->
-            <div id="section-resumen" class="category-section hidden w-full">
+            <!-- Seccion Resumen -->
+            <div id="section-resumen" class="tipomotos hidden w-full">
                 <h2 class="text-2xl font-semibold mb-2 text-yellow-500 text-center">Resumen</h2>
                 <p class="text-gray-400 mb-8 text-center">Revisa tu configuración</p>
                 
@@ -112,7 +112,7 @@
             
         </div>
         
-        <!-- Navegación inferior -->
+        <!-- Navegacion de abajo-->
         <div class="border-t border-gray-700 p-4 flex flex-col items-center gap-4 bg-black/90">
             <div class="flex gap-2">
                 <span id="step-1" class="w-3 h-3 rounded-full bg-yellow-500"></span>
