@@ -34,6 +34,11 @@ class User extends Authenticatable
         return $this->hasMany(Pedido::class);
     }
 
+    public function esMecanico(): bool
+    {
+        return $this->rol === 'mecanico';
+    }
+
     public function esAdmin(): bool
     {
         return $this->rol === 'admin';

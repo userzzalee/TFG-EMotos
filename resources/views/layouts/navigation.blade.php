@@ -5,7 +5,15 @@
 
     {{-- Controles izquierda --}}
     <div class="flex items-center gap-5">
-        <a href="#" class="text-[#ddd] no-underline text-[14px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Taller</a>
+        @auth
+            @if(Auth::user()->rol === 'mecanico' || Auth::user()->esAdmin())
+                <a href="{{ route('taller.nuevas-citas') }}" class="text-[#ddd] no-underline text-[14px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Taller</a>
+            @else
+                <a href="{{ route('taller.crear') }}" class="text-[#ddd] no-underline text-[14px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Taller</a>
+            @endif
+        @else
+            <a href="{{ route('login') }}" class="text-[#ddd] no-underline text-[14px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Taller</a>
+        @endauth
         <a href="{{ route('merchandising') }}" class="text-[#ddd] no-underline text-[14px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Merchandising</a>
         <a href="#" class="text-[#ddd] no-underline text-[14px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Repuestos</a>
     </div>
