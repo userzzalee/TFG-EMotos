@@ -20,13 +20,13 @@
 <main class="relative z-10 text-white text-center">
 
     <div class="flex items-center justify-center h-screen">
-        <h2 class="text-5xl font-bold tracking-widest">
+        <h2 class="text-3xl font-bold tracking-widest">
             RIDE ANYWHERE, <br> ANYTIME
         </h2>
     </div>
 
     <div class="fixed bottom-10 left-0 w-full flex justify-center gap-3">
-        <a href="{{ route('configurador') }}" class="bg-[rgb(224,224,224)] rounded-[20px] w-[150px] py-[10px] border-none cursor-pointer transition-all duration-200 hover:scale-105 hover:bg-[rgb(200,200,200)] no-underline text-black block text-center">Configura tu moto</a>
+        <a href="{{ route('configurador') }}" class="bg-[rgb(224,224,224)] rounded-[25px] w-[140px] py-[10px] border-none cursor-pointer transition-all duration-200 hover:scale-105 hover:bg-[rgb(210,210,210)] no-underline text-black block text-center text-sm">Configura tu moto</a>
     </div>
 </main>
 

@@ -10,11 +10,10 @@
 
 @include('layouts.navigation')
 
-<div class="pt-[70px] min-h-screen flex">
+<div class="pt-[90px] min-h-screen flex">
 
     {{-- Sidebar --}}
-    <aside class="w-56 shrink-0 border-r border-white/10 px-4 py-8 flex flex-col gap-1">
-        <p class="text-[10px] uppercase tracking-widest text-white/30 mb-3 pl-2">Taller</p>
+    <aside class="w-48 shrink-0 border-r border-white/10 px-4 pt-0 pb-2 flex flex-col justify-center gap-1">
 
         @auth
             @if(Auth::user()->rol === 'mecanico' || Auth::user()->esAdmin())
@@ -46,16 +45,16 @@
     </aside>
 
     {{-- Contenido --}}
-    <main class="flex-1 px-8 py-8 max-w-5xl">
+    <main class="flex-1 px-6 py-8 pt-10 max-w-5xl">
 
         {{-- Flash messages --}}
         @if(session('success'))
-            <div class="mb-6 px-4 py-3 rounded border border-[#f0c36d]/40 bg-[#f0c36d]/10 text-[#f0c36d] text-sm">
+            <div class="mb-4 px-4 py-3 rounded border border-[#f0c36d]/40 bg-[#f0c36d]/10 text-[#f0c36d] text-sm">
                 {{ session('success') }}
             </div>
         @endif
         @if(session('error'))
-            <div class="mb-6 px-4 py-3 rounded border border-red-500/40 bg-red-500/10 text-red-400 text-sm">
+            <div class="mb-4 px-4 py-3 rounded border border-red-500/40 bg-red-500/10 text-red-400 text-sm">
                 {{ session('error') }}
             </div>
         @endif
@@ -69,15 +68,17 @@
         display: block;
         padding: 8px 12px;
         border-radius: 6px;
-        font-size: 13px;
+        font-size: 11px;
         text-transform: uppercase;
         letter-spacing: .08em;
         color: #9ca3af;
         text-decoration: none;
-        transition: color .15s, background .15s;
+        transition: color .15s, background .15s, border-color .15s;
+        border: 1px solid rgba(255,255,255,.08);
+        background: rgba(255,255,255,.03);
     }
-    .sidebar-link:hover { color: #f0c36d; background: rgba(240,195,109,.07); }
-    .sidebar-link.active { color: #f0c36d; background: rgba(240,195,109,.12); }
+    .sidebar-link:hover { color: #f0c36d; background: rgba(240,195,109,.1); border-color: rgba(240,195,109,.2); }
+    .sidebar-link.active { color: #f0c36d; background: rgba(240,195,109,.15); border-color: rgba(240,195,109,.3); }
 </style>
 
 </body>

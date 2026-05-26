@@ -80,11 +80,7 @@
         </div>
     </div>
 @empty
-    <div class="text-center py-20 text-white/20">
-        <svg class="w-12 h-12 mx-auto mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-        </svg>
+    <div class="min-h-[400px] flex items-center justify-center text-white/20">
         <p class="text-sm uppercase tracking-widest">Sin nuevas citas</p>
     </div>
 @endforelse
