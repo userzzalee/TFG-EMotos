@@ -9,17 +9,12 @@ use Illuminate\Support\Facades\Storage;
 
 class TallerController extends Controller
 {
-    // ═══════════════════════════════════════════════════════════
-    //  USUARIO NORMAL
-    // ═══════════════════════════════════════════════════════════
-
-    /** Formulario nueva cita */
+    // Usuario normal
     public function crear()
     {
         return view('taller.usuario.crear');
     }
 
-    /** Guardar nueva cita */
     public function guardar(Request $request)
     {
         $data = $request->validate([
@@ -54,7 +49,6 @@ class TallerController extends Controller
                          ->with('success', 'Cita creada correctamente. Te avisaremos cuando sea aceptada.');
     }
 
-    /** Mis citas (usuario) */
     public function misCitas()
     {
         $pendientes  = CitaTaller::where('user_id', Auth::id())
@@ -72,7 +66,6 @@ class TallerController extends Controller
         return view('taller.usuario.mis-citas', compact('pendientes', 'finalizadas', 'pagadas'));
     }
 
-    /** Pagar cita finalizada (simulado — integrar pasarela real si se requiere) */
     public function pagar(CitaTaller $cita)
     {
         abort_unless($cita->user_id === Auth::id(), 403);
@@ -84,11 +77,7 @@ class TallerController extends Controller
                          ->with('success', 'Pago registrado correctamente. ¡Gracias!');
     }
 
-    // ═══════════════════════════════════════════════════════════
-    //  MECÁNICO
-    // ═══════════════════════════════════════════════════════════
-
-    /** Nuevas citas pendientes de aceptar */
+    // Mecanico
     public function nuevasCitas()
     {
         abort_unless(Auth::user()->rol === 'mecanico' || Auth::user()->esAdmin(), 403);
@@ -98,7 +87,6 @@ class TallerController extends Controller
         return view('taller.mecanico.nuevas-citas', compact('citas'));
     }
 
-    /** Aceptar una cita */
     public function aceptar(CitaTaller $cita)
     {
         abort_unless(Auth::user()->rol === 'mecanico' || Auth::user()->esAdmin(), 403);
@@ -113,7 +101,6 @@ class TallerController extends Controller
                          ->with('success', 'Cita aceptada.');
     }
 
-    /** Trabajo pendiente (citas aceptadas/en proceso del mecánico) */
     public function trabajoPendiente()
     {
         abort_unless(Auth::user()->rol === 'mecanico' || Auth::user()->esAdmin(), 403);
@@ -125,7 +112,6 @@ class TallerController extends Controller
         return view('taller.mecanico.trabajo-pendiente', compact('citas'));
     }
 
-    /** Ver detalle de una cita (mecánico) */
     public function detalleCita(CitaTaller $cita)
     {
         abort_unless(Auth::user()->rol === 'mecanico' || Auth::user()->esAdmin(), 403);
@@ -133,7 +119,6 @@ class TallerController extends Controller
         return view('taller.mecanico.detalle-cita', compact('cita'));
     }
 
-    /** Guardar comentario del mecánico y/o cambiar estado a en_proceso */
     public function comentar(Request $request, CitaTaller $cita)
     {
         abort_unless(Auth::user()->rol === 'mecanico' || Auth::user()->esAdmin(), 403);
@@ -152,7 +137,6 @@ class TallerController extends Controller
                          ->with('success', 'Comentario guardado.');
     }
 
-    /** Finalizar cita con coste */
     public function finalizar(Request $request, CitaTaller $cita)
     {
         abort_unless(Auth::user()->rol === 'mecanico' || Auth::user()->esAdmin(), 403);
@@ -173,7 +157,6 @@ class TallerController extends Controller
                          ->with('success', 'Cita finalizada. El cliente podrá realizar el pago.');
     }
 
-    /** Historial de trabajo (citas completadas del mecánico) */
     public function historial()
     {
         abort_unless(Auth::user()->rol === 'mecanico' || Auth::user()->esAdmin(), 403);
@@ -185,12 +168,19 @@ class TallerController extends Controller
         return view('taller.mecanico.historial', compact('citas'));
     }
 
-    // ── Página principal del taller ──────────────────────────────────────────────
     public function index()
     {
-        return view('taller.index');
+        $nuevas = CitaTaller::where('estado', 'pendiente')->count();
+        
+        $enproceso = CitaTaller::where('mecanico_id', Auth::id())
+                              ->whereIn('estado', ['aceptada', 'en_proceso'])
+                              ->count();
+        
+        $pendientes = CitaTaller::where('user_id', Auth::id())
+                             ->whereIn('estado', ['pendiente', 'aceptada', 'en_proceso'])
+                             ->count();
+        
+        return view('taller.index', compact('nuevas', 'enproceso', 'pendientes'));
     }
 
 }
-
-    // Añadir este método al TallerController existente

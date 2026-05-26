@@ -27,7 +27,12 @@
     <div class="justify-self-end flex items-center gap-5">
         @auth
             <a href="{{ route('perfil') }}" class="text-[#ddd] no-underline text-[14px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">{{ Auth::user()->name }}</a>
-            <a href="#" class="text-[#ddd] no-underline text-[14px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Carrito</a>
+            <a href="{{ route('cart.index') }}" class="text-[#ddd] no-underline text-[14px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors relative">
+                Carrito
+                @if(session('cart') && count(session('cart')) > 0)
+                    <span class="absolute -top-2 -right-3 bg-yellow-500 w-3 h-3 rounded-full"></span>
+                @endif
+            </a>
         @else
             <a href="{{ route('login') }}" class="text-[#ddd] no-underline text-[14px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Login</a>
             <a href="{{ route('register') }}" class="text-[#f0c36d] no-underline text-[14px] uppercase tracking-widest hover:text-[#e0c97a] transition-colors">Registro</a>

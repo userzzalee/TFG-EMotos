@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MerchandisingController;
 use App\Http\Controllers\TallerController;
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -12,6 +13,15 @@ Route::get('/', function () {
 Route::get('/merchandising', [MerchandisingController::class, 'index'])->name('merchandising');
 Route::get('/admin/productos/crear', [MerchandisingController::class, 'create'])->name('merchandising.create');
 Route::post('/admin/productos', [MerchandisingController::class, 'store'])->name('merchandising.store');
+
+// ── Carrito ─────────────────────────────────────────────────────────────
+Route::prefix('carrito')->name('cart.')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('index');
+    Route::post('/add', [CartController::class, 'add'])->name('add');
+    Route::post('/update/{id}', [CartController::class, 'update'])->name('update');
+    Route::post('/remove/{id}', [CartController::class, 'remove'])->name('remove');
+    Route::post('/clear', [CartController::class, 'clear'])->name('clear');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

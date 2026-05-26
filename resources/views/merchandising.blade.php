@@ -44,9 +44,14 @@
                             
                             <!-- Botón añadir al carrito (hover) -->
                             <div class="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                                <button class="w-full bg-white text-black py-3 text-sm tracking-widest font-medium hover:bg-yellow-500 transition-all">
-                                    AÑADIR
-                                </button>
+                                <form action="{{ route('cart.add') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="producto_id" value="{{ $producto->id }}">
+                                    <input type="hidden" name="cantidad" value="1">
+                                    <button type="submit" class="w-full bg-white text-black py-3 text-sm tracking-widest font-medium hover:bg-yellow-500 transition-all">
+                                        AÑADIR
+                                    </button>
+                                </form>
                             </div>
                         </div>
                         

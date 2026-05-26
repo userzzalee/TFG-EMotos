@@ -7,20 +7,14 @@
 
 @if($citas->count())
     {{-- Resumen rápido --}}
-    <div class="grid grid-cols-3 gap-4 mb-8">
+    <div class="grid grid-cols-2 gap-4 mb-8">
         <div class="bg-[#111] border border-white/10 rounded-xl px-5 py-4">
             <p class="text-xs uppercase tracking-widest text-white/30 mb-1">Total citas</p>
             <p class="text-2xl font-bold text-white">{{ $citas->count() }}</p>
         </div>
         <div class="bg-[#111] border border-white/10 rounded-xl px-5 py-4">
             <p class="text-xs uppercase tracking-widest text-white/30 mb-1">Facturado</p>
-            <p class="text-2xl font-bold text-[#f0c36d]">{{ number_format($citas->sum('coste'), 2) }} €</p>
-        </div>
-        <div class="bg-[#111] border border-white/10 rounded-xl px-5 py-4">
-            <p class="text-xs uppercase tracking-widest text-white/30 mb-1">Pendiente cobro</p>
-            <p class="text-2xl font-bold text-green-400">
-                {{ number_format($citas->where('estado', 'finalizada')->sum('coste'), 2) }} €
-            </p>
+            <p class="text-2xl font-bold text-[#f0c36d]">{{ number_format($citas->where('estado', 'finalizada')->sum('coste'), 2) }} €</p>
         </div>
     </div>
 @endif
