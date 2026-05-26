@@ -108,4 +108,50 @@ class CartController extends Controller
 
         return redirect()->route('cart.index')->with('success', 'Carrito vaciado correctamente.');
     }
+
+    /**
+     * Add a custom motorcycle configuration to the cart
+     */
+    public function addConfiguration(Request $request)
+    {
+        $request->validate([
+            'modelo' => 'required|in:sport,cruiser',
+            'color' => 'required|in:negro,dorado,rojo,blanco',
+            'motor' => 'required|in:250,500,1000',
+            'precio' => 'required|numeric|min:0',
+        ]);
+
+        $nombresColores = [
+            'negro' => 'Negro',
+            'dorado' => 'Dorado',
+            'rojo' => 'Rojo',
+            'blanco' => 'Blanco'
+        ];
+
+        $nombresModelos = [
+            'sport' => 'Sport',
+            'cruiser' => 'Cruiser'
+        ];
+
+        $cart = Session::get('cart', []);
+        
+        // Generate a unique ID for the configuration
+        $configId = 'config_' . time();
+        
+        $cart[$configId] = [
+            'id' => $configId,
+            'nombre' => 'Moto ' . $nombresModelos[$request->modelo] . ' ' . $request->motor . 'cc',
+            'precio' => $request->precio,
+            'imagen' => 'images/' . ($request->motor == '250' ? '50cc.png' : ($request->motor . 'cc.png')),
+            'cantidad' => 1,
+            'categoria' => 'Configuración',
+            'modelo' => $request->modelo,
+            'color' => $nombresColores[$request->color],
+            'motor' => $request->motor . 'cc'
+        ];
+
+        Session::put('cart', $cart);
+
+        return redirect()->route('cart.index')->with('success', 'Configuración añadida al carrito correctamente.');
+    }
 }

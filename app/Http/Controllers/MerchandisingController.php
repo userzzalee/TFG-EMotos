@@ -43,4 +43,38 @@ class MerchandisingController extends Controller
 
         return redirect()->route('merchandising')->with('success', 'Producto creado exitosamente');
     }
+
+    public function edit($id)
+    {
+        $producto = Producto::findOrFail($id);
+        return view('admin.editar-producto', compact('producto'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'nullable|string',
+            'precio' => 'required|numeric|min:0',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'stock' => 'required|integer|min:0',
+            'categoria' => 'nullable|string|max:100',
+        ]);
+
+        $producto = Producto::findOrFail($id);
+
+        if ($request->hasFile('imagen')) {
+            $imagenPath = $request->file('imagen')->store('productos', 'public');
+            $producto->imagen = $imagenPath;
+        }
+
+        $producto->nombre = $request->nombre;
+        $producto->descripcion = $request->descripcion;
+        $producto->precio = $request->precio;
+        $producto->stock = $request->stock;
+        $producto->categoria = $request->categoria;
+        $producto->save();
+
+        return redirect()->route('merchandising')->with('success', 'Producto actualizado exitosamente');
+    }
 }

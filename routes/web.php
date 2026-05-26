@@ -13,11 +13,14 @@ Route::get('/', function () {
 Route::get('/merchandising', [MerchandisingController::class, 'index'])->name('merchandising');
 Route::get('/admin/productos/crear', [MerchandisingController::class, 'create'])->name('merchandising.create');
 Route::post('/admin/productos', [MerchandisingController::class, 'store'])->name('merchandising.store');
+Route::get('/admin/productos/{id}/editar', [MerchandisingController::class, 'edit'])->name('merchandising.edit');
+Route::post('/admin/productos/{id}', [MerchandisingController::class, 'update'])->name('merchandising.update');
 
 // ── Carrito ─────────────────────────────────────────────────────────────
 Route::prefix('carrito')->name('cart.')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('index');
     Route::post('/add', [CartController::class, 'add'])->name('add');
+    Route::post('/add-config', [CartController::class, 'addConfiguration'])->name('add-config');
     Route::post('/update/{id}', [CartController::class, 'update'])->name('update');
     Route::post('/remove/{id}', [CartController::class, 'remove'])->name('remove');
     Route::post('/clear', [CartController::class, 'clear'])->name('clear');

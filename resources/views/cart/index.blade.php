@@ -60,9 +60,17 @@
                     <div class="bg-gray-800/60 rounded-xl p-3 flex gap-3 items-center border border-gray-700/50 hover:border-yellow-500/50 transition-all">
                         <!-- Imagen -->
                         <div class="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden shadow-lg">
-                            <img src="{{ asset('storage/' . $item['imagen']) }}" 
-                                 alt="{{ $item['nombre'] }}" 
-                                 class="w-full h-full object-cover">
+                            @if(isset($item['categoria']) && $item['categoria'] === 'Configuración')
+                                <img src="{{ asset($item['imagen']) }}" 
+                                     alt="{{ $item['nombre'] }}" 
+                                     class="w-full h-full object-cover"
+                                     onerror="this.src='{{ asset('images/moto1.jpg') }}'">
+                            @else
+                                <img src="{{ asset('storage/' . $item['imagen']) }}" 
+                                     alt="{{ $item['nombre'] }}" 
+                                     class="w-full h-full object-cover"
+                                     onerror="this.src='{{ asset('images/moto1.jpg') }}'">
+                            @endif
                         </div>
                         
                         <!-- Info -->
@@ -80,7 +88,7 @@
                         </div>
                         
                         <!-- Subtotal -->
-                        <div class="text-right w-16">
+                        <div class="text-right w-20">
                             <p class="text-base font-bold">€{{ number_format($item['precio'] * $item['cantidad'], 2) }}</p>
                         </div>
                         

@@ -3,7 +3,7 @@ let colorSeleccionado = 'negro';
 let motorSeleccionado = '250';
 let seccionActual = 'modelo';
 
-const secciones = ['modelo', 'color', 'motor', 'resumen'];
+const secciones = ['modelo', 'motor', 'color', 'resumen'];
 const precios = {
     sport: { base: 4999 },
     cruiser: { base: 5999 }
@@ -18,7 +18,7 @@ const preciosMotores = {
 const nombresColores = {
     'negro': 'Negro',
     'dorado': 'Dorado',
-    'gris': 'Gris',
+    'rojo': 'Rojo',
     'blanco': 'Blanco'
 };
 
@@ -36,6 +36,21 @@ function selectModel(model) {
     }
     if (summaryModel) {
         summaryModel.textContent = model.charAt(0).toUpperCase() + model.slice(1);
+    }
+    
+    // Update hidden form field
+    const configModelo = document.getElementById('config-modelo');
+    if (configModelo) {
+        configModelo.value = model;
+    }
+    
+    // Update price in hidden form field
+    const configPrecio = document.getElementById('config-precio');
+    if (configPrecio) {
+        const basePrice = precios[model].base;
+        const enginePrice = preciosMotores[motorSeleccionado];
+        const total = basePrice + enginePrice;
+        configPrecio.value = total;
     }
     
     // Update button styles
@@ -66,6 +81,15 @@ function selectColor(color) {
         summaryColor.textContent = nombresColores[color];
     }
     
+    // Update hidden form field
+    const configColor = document.getElementById('config-color');
+    if (configColor) {
+        configColor.value = color;
+    }
+    
+    // Update motorcycle image based on color when using 250cc engine
+    updateMotoImage();
+    
     // Update button styles
     document.querySelectorAll('.colores').forEach(btn => {
         btn.classList.remove('border-yellow-500', 'scale-110');
@@ -85,6 +109,23 @@ function selectEngine(engine) {
     const summaryEngine = document.getElementById('summary-engine');
     if (summaryEngine) {
         summaryEngine.textContent = engine + 'cc';
+    }
+    
+    // Update motorcycle image based on engine and color
+    updateMotoImage();
+    
+    // Update hidden form fields
+    const configMotor = document.getElementById('config-motor');
+    if (configMotor) {
+        configMotor.value = engine;
+    }
+    
+    const configPrecio = document.getElementById('config-precio');
+    if (configPrecio) {
+        const basePrice = precios[modeloSeleccionado].base;
+        const enginePrice = preciosMotores[engine];
+        const total = basePrice + enginePrice;
+        configPrecio.value = total;
     }
     
     // Update button styles
@@ -111,6 +152,30 @@ function updatePrice() {
     if (totalPriceEl) {
         totalPriceEl.textContent = '€' + total.toLocaleString();
     }
+}
+
+function updateMotoImage() {
+    const motoImage = document.getElementById('moto-emoji');
+    if (!motoImage) return;
+    
+    let imagePath = 'images/moto1.jpg';
+    
+    if (motorSeleccionado === '250') {
+        // 50cc engine - use color-specific images
+        const colorImageMap = {
+            'negro': 'images/50cc.png',
+            'dorado': 'images/50cc_amarilla.png',
+            'rojo': 'images/50cc_rojo.png',
+            'blanco': 'images/50cc_blanco.png'
+        };
+        imagePath = colorImageMap[colorSeleccionado] || 'images/50cc.png';
+    } else if (motorSeleccionado === '500') {
+        imagePath = 'images/500cc.png';
+    } else if (motorSeleccionado === '1000') {
+        imagePath = 'images/1000cc.png';
+    }
+    
+    motoImage.src = imagePath;
 }
 
 function goToSection(sectionName) {
