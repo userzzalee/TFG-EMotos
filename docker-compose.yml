@@ -3,31 +3,22 @@ services:
     build: .
     ports:
       - "8000:8000"
-      # - "5173:5173"
     volumes:
       - .:/app
       - /app/vendor
     stdin_open: true
     tty: true
-    depends_on:
-      - mysql
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     environment:
-      - DB_HOST=mysql
-      - DB_PORT=3306
-      - DB_DATABASE=laravel
-      - DB_USERNAME=laravel
-      - DB_PASSWORD=secret
-
-  mysql:
-    image: mysql:8.0
-    environment:
-      MYSQL_DATABASE: laravel
-      MYSQL_USER: laravel
-      MYSQL_PASSWORD: secret
-      MYSQL_ROOT_PASSWORD: root
-    volumes:
-      - mysql_data:/var/lib/mysql
-    
+      - DB_CONNECTION=pgsql
+      - DB_HOST=aws-1-eu-central-1.pooler.supabase.com
+      - DB_PORT=6543
+      - DB_DATABASE=postgres
+      - DB_USERNAME=postgres.ymasedycdgyroiwouqya
+      - DB_PASSWORD=1pQH4jxqgFOkgJxq
+      - DB_SSLMODE=require
   vite:
     image: node:20
     working_dir: /var/www
@@ -36,6 +27,3 @@ services:
     ports:
       - "5173:5173"
     command: sh -c "npm install && npm run dev"
-
-volumes:
-  mysql_data:
