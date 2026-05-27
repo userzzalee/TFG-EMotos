@@ -20,7 +20,6 @@ class Mensaje extends Model
         'leido_at' => 'datetime',
     ];
 
-    // ─── Relaciones ───────────────────────────────────────────────
 
     public function conversacion(): BelongsTo
     {
@@ -32,7 +31,6 @@ class Mensaje extends Model
         return $this->belongsTo(User::class, 'remitente_id');
     }
 
-    // ─── Helpers ──────────────────────────────────────────────────
 
     public function esPropio(int $userId): bool
     {

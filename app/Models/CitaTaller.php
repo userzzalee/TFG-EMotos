@@ -34,7 +34,6 @@ class CitaTaller extends Model
         ];
     }
 
-    // ── Relaciones ──────────────────────────────────────────────
 
     public function usuario(): BelongsTo
     {
@@ -45,8 +44,6 @@ class CitaTaller extends Model
     {
         return $this->belongsTo(User::class, 'mecanico_id');
     }
-
-    // ── Helpers ──────────────────────────────────────────────────
 
     public function esPendiente(): bool    { return $this->estado === 'pendiente'; }
     public function esAceptada(): bool     { return $this->estado === 'aceptada'; }

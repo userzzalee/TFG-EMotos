@@ -21,7 +21,6 @@ class Conversacion extends Model
         'ultimo_mensaje_at' => 'datetime',
     ];
 
-    // ─── Relaciones ───────────────────────────────────────────────
 
     public function comprador(): BelongsTo
     {
@@ -48,16 +47,15 @@ class Conversacion extends Model
         return $this->hasMany(Mensaje::class, 'conversacion_id')->latest()->limit(1);
     }
 
-    // ─── Helpers ──────────────────────────────────────────────────
+
 
     /**
      * Devuelve el otro participante de la conversación (no el usuario actual).
      */
     public function otroParticipante(int $userId): User
     {
-        return $this->comprador_id === $userId
-            ? $this->vendedor
-            : $this->comprador;
+        return $this->comprador_id === $userId 
+        ? $this->vendedor: $this->comprador;  // ture = vendedor , false = comprador
     }
 
     /**

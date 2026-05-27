@@ -17,10 +17,8 @@ class ChatController extends Controller
         $this->middleware('auth');
     }
 
-    // ─────────────────────────────────────────────────────────────
-    // Listar todas las conversaciones del usuario autenticado
-    // ─────────────────────────────────────────────────────────────
 
+    // Listar todas las conversaciones del usuario autenticado
     public function index(): View
     {
         $userId = Auth::id();
@@ -34,15 +32,11 @@ class ChatController extends Controller
         return view('chat.index', compact('conversaciones', 'userId'));
     }
 
-    // ─────────────────────────────────────────────────────────────
     // Abrir o crear conversación al pulsar "Contactar con el vendedor"
-    // ─────────────────────────────────────────────────────────────
-
     public function iniciar(Producto $producto): RedirectResponse
     {
         $compradorId = Auth::id();
-        $vendedorId  = $producto->user_id; // Ajusta al nombre de tu FK
-
+        $vendedorId  = $producto->user_id; // Ajusta al nombre 
         // El vendedor no puede chatear consigo mismo
         if ($compradorId === $vendedorId) {
             return back()->with('error', 'No puedes contactar contigo mismo.');
@@ -60,10 +54,8 @@ class ChatController extends Controller
         return redirect()->route('chat.show', $conversacion->id);
     }
 
-    // ─────────────────────────────────────────────────────────────
-    // Ver una conversación y sus mensajes
-    // ─────────────────────────────────────────────────────────────
 
+    // Ver una conversación y sus mensajes
     public function show(Conversacion $conversacion): View
     {
         $userId = Auth::id();
@@ -86,10 +78,8 @@ class ChatController extends Controller
         return view('chat.show', compact('conversacion', 'mensajes', 'otro', 'userId'));
     }
 
-    // ─────────────────────────────────────────────────────────────
-    // Enviar un mensaje
-    // ─────────────────────────────────────────────────────────────
 
+    // Enviar un mensaje
     public function enviar(Request $request, Conversacion $conversacion): RedirectResponse
     {
         $userId = Auth::id();
