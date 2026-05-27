@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MerchandisingController;
 use App\Http\Controllers\TallerController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -24,6 +25,14 @@ Route::prefix('carrito')->name('cart.')->group(function () {
     Route::post('/update/{id}', [CartController::class, 'update'])->name('update');
     Route::post('/remove/{id}', [CartController::class, 'remove'])->name('remove');
     Route::post('/clear', [CartController::class, 'clear'])->name('clear');
+});
+
+// ── Chat ─────────────────────────────────────────────────────────────────
+Route::middleware('auth')->prefix('chat')->name('chat.')->group(function () {
+    Route::get('/',                              [ChatController::class, 'index'])  ->name('index');
+    Route::post('/iniciar/{producto}',           [ChatController::class, 'iniciar'])->name('iniciar');
+    Route::get('/{conversacion}',                [ChatController::class, 'show'])   ->name('show');
+    Route::post('/{conversacion}/mensajes',      [ChatController::class, 'enviar']) ->name('enviar');
 });
 
 Route::middleware('auth')->group(function () {
