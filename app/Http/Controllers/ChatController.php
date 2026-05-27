@@ -12,10 +12,6 @@ use Illuminate\View\View;
 
 class ChatController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
 
     // Listar todas las conversaciones del usuario autenticado

@@ -1,4 +1,4 @@
-@extends('taller.layout')
+@extends('layouts.general')
 
 @section('content')
 

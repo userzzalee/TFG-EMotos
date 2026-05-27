@@ -30,23 +30,23 @@ Route::prefix('carrito')->name('cart.')->group(function () {
 
 // ── Segunda Mano ──────────────────────────────────────────────────────────────
 Route::prefix('segunda-mano')->name('segundamano.')->group(function () {
-
-    // Públicas (cualquiera puede ver)
-    Route::get('/',          [SegundaManoController::class, 'index'])->name('index');
-    Route::get('/{anuncio}', [SegundaManoController::class, 'show']) ->name('show');
+    // Públicas
+    Route::get('/', [SegundaManoController::class, 'index'])->name('index');
 
     // Requieren login
     Route::middleware('auth')->group(function () {
-        Route::get('/anuncio/crear',             [SegundaManoController::class, 'create']) ->name('crear');
-        Route::post('/anuncio/crear',            [SegundaManoController::class, 'store'])  ->name('store');
-        Route::get('/anuncio/{anuncio}/editar',  [SegundaManoController::class, 'edit'])   ->name('editar');
-        Route::post('/anuncio/{anuncio}/editar', [SegundaManoController::class, 'update']) ->name('update');
-        Route::post('/anuncio/{anuncio}/borrar', [SegundaManoController::class, 'destroy'])->name('destroy');
         Route::get('/mis-anuncios',              [SegundaManoController::class, 'misAnuncios'])->name('mis-anuncios');
-        Route::post('/{anuncio}/contactar',      [SegundaManoController::class, 'contactar']) ->name('contactar');
+        Route::get('/anuncio/crear',             [SegundaManoController::class, 'create'])->name('crear');
+        Route::post('/anuncio/crear',            [SegundaManoController::class, 'store'])->name('store');
+        Route::get('/anuncio/{anuncio}/editar',  [SegundaManoController::class, 'edit'])->name('editar');
+        Route::post('/anuncio/{anuncio}/editar', [SegundaManoController::class, 'update'])->name('update');
+        Route::post('/anuncio/{anuncio}/borrar', [SegundaManoController::class, 'destroy'])->name('destroy');
+        Route::post('/{anuncio}/contactar',      [SegundaManoController::class, 'contactar'])->name('contactar');
     });
-});
 
+    // Esta va AL FINAL para no capturar las rutas específicas
+    Route::get('/{anuncio}', [SegundaManoController::class, 'show'])->name('show');
+});
 // ── Chat ──────────────────────────────────────────────────────────────────────
 Route::middleware('auth')->prefix('chat')->name('chat.')->group(function () {
     Route::get('/',                         [ChatController::class, 'index'])  ->name('index');
@@ -89,6 +89,13 @@ Route::middleware('auth')->prefix('taller/mecanico')->name('taller.')->group(fun
     Route::get('/{cita}',            [TallerController::class, 'detalleCita'])     ->name('detalle-cita');
     Route::post('/{cita}/comentar',  [TallerController::class, 'comentar'])        ->name('comentar');
     Route::post('/{cita}/finalizar', [TallerController::class, 'finalizar'])       ->name('finalizar');
+});
+
+// ── Panel Admin ───────────────────────────────────────────────────────────────
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/usuarios', [AdminController::class, 'index'])->name('usuarios');
+    Route::patch('/usuarios/{usuario}/rol', [AdminController::class, 'actualizarRol'])->name('usuarios.rol');
+    Route::delete('/usuarios/{usuario}', [AdminController::class, 'eliminar'])->name('usuarios.eliminar');
 });
 
 require __DIR__.'/auth.php';
