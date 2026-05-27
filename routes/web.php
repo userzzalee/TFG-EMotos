@@ -5,6 +5,7 @@ use App\Http\Controllers\MerchandisingController;
 use App\Http\Controllers\TallerController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\SegundaManoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,27 +18,47 @@ Route::post('/admin/productos', [MerchandisingController::class, 'store'])->name
 Route::get('/admin/productos/{id}/editar', [MerchandisingController::class, 'edit'])->name('merchandising.edit');
 Route::post('/admin/productos/{id}', [MerchandisingController::class, 'update'])->name('merchandising.update');
 
-// ── Carrito ─────────────────────────────────────────────────────────────
+// ── Carrito ───────────────────────────────────────────────────────────────────
 Route::prefix('carrito')->name('cart.')->group(function () {
-    Route::get('/', [CartController::class, 'index'])->name('index');
-    Route::post('/add', [CartController::class, 'add'])->name('add');
-    Route::post('/add-config', [CartController::class, 'addConfiguration'])->name('add-config');
-    Route::post('/update/{id}', [CartController::class, 'update'])->name('update');
-    Route::post('/remove/{id}', [CartController::class, 'remove'])->name('remove');
-    Route::post('/clear', [CartController::class, 'clear'])->name('clear');
+    Route::get('/',              [CartController::class, 'index'])            ->name('index');
+    Route::post('/add',          [CartController::class, 'add'])              ->name('add');
+    Route::post('/add-config',   [CartController::class, 'addConfiguration']) ->name('add-config');
+    Route::post('/update/{id}',  [CartController::class, 'update'])           ->name('update');
+    Route::post('/remove/{id}',  [CartController::class, 'remove'])           ->name('remove');
+    Route::post('/clear',        [CartController::class, 'clear'])            ->name('clear');
 });
 
-// ── Chat ─────────────────────────────────────────────────────────────────
+// ── Segunda Mano ──────────────────────────────────────────────────────────────
+Route::prefix('segunda-mano')->name('segundamano.')->group(function () {
+
+    // Públicas (cualquiera puede ver)
+    Route::get('/',          [SegundaManoController::class, 'index'])->name('index');
+    Route::get('/{anuncio}', [SegundaManoController::class, 'show']) ->name('show');
+
+    // Requieren login
+    Route::middleware('auth')->group(function () {
+        Route::get('/anuncio/crear',             [SegundaManoController::class, 'create']) ->name('crear');
+        Route::post('/anuncio/crear',            [SegundaManoController::class, 'store'])  ->name('store');
+        Route::get('/anuncio/{anuncio}/editar',  [SegundaManoController::class, 'edit'])   ->name('editar');
+        Route::post('/anuncio/{anuncio}/editar', [SegundaManoController::class, 'update']) ->name('update');
+        Route::post('/anuncio/{anuncio}/borrar', [SegundaManoController::class, 'destroy'])->name('destroy');
+        Route::get('/mis-anuncios',              [SegundaManoController::class, 'misAnuncios'])->name('mis-anuncios');
+        Route::post('/{anuncio}/contactar',      [SegundaManoController::class, 'contactar']) ->name('contactar');
+    });
+});
+
+// ── Chat ──────────────────────────────────────────────────────────────────────
 Route::middleware('auth')->prefix('chat')->name('chat.')->group(function () {
-    Route::get('/',                              [ChatController::class, 'index'])  ->name('index');
-    Route::post('/iniciar/{producto}',           [ChatController::class, 'iniciar'])->name('iniciar');
-    Route::get('/{conversacion}',                [ChatController::class, 'show'])   ->name('show');
-    Route::post('/{conversacion}/mensajes',      [ChatController::class, 'enviar']) ->name('enviar');
+    Route::get('/',                         [ChatController::class, 'index'])  ->name('index');
+    Route::post('/iniciar/{producto}',      [ChatController::class, 'iniciar'])->name('iniciar');
+    Route::get('/{conversacion}',           [ChatController::class, 'show'])   ->name('show');
+    Route::post('/{conversacion}/mensajes', [ChatController::class, 'enviar']) ->name('enviar');
 });
 
+// ── Perfil ────────────────────────────────────────────────────────────────────
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile',    [ProfileController::class, 'edit'])   ->name('profile.edit');
+    Route::patch('/profile',  [ProfileController::class, 'update']) ->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
@@ -45,7 +66,7 @@ Route::get('/perfil', function () {
     return view('perfil');
 })->middleware('auth')->name('perfil');
 
-Route::middleware('auth')->get('/taller', [App\Http\Controllers\TallerController::class, 'index'])->name('taller');
+Route::middleware('auth')->get('/taller', [TallerController::class, 'index'])->name('taller');
 
 Route::get('/configurador', function () {
     return view('configurador');
@@ -53,10 +74,10 @@ Route::get('/configurador', function () {
 
 // ── Taller – Usuario ──────────────────────────────────────────────────────────
 Route::middleware('auth')->prefix('taller')->name('taller.')->group(function () {
-    Route::get('/nueva',             [TallerController::class, 'crear'])    ->name('crear');
-    Route::post('/nueva',            [TallerController::class, 'guardar'])   ->name('guardar');
-    Route::get('/mis-citas',         [TallerController::class, 'misCitas'])  ->name('mis-citas');
-    Route::post('/{cita}/pagar',     [TallerController::class, 'pagar'])     ->name('pagar');
+    Route::get('/nueva',         [TallerController::class, 'crear'])   ->name('crear');
+    Route::post('/nueva',        [TallerController::class, 'guardar']) ->name('guardar');
+    Route::get('/mis-citas',     [TallerController::class, 'misCitas'])->name('mis-citas');
+    Route::post('/{cita}/pagar', [TallerController::class, 'pagar'])   ->name('pagar');
 });
 
 // ── Taller – Mecánico ─────────────────────────────────────────────────────────

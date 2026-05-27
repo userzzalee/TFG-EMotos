@@ -15,6 +15,7 @@
             <a href="{{ route('login') }}" class="text-[#ddd] no-underline text-[12px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Taller</a>
         @endauth
         <a href="{{ route('merchandising') }}" class="text-[#ddd] no-underline text-[12px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Merchandising</a>
+        <a href="{{ route('segundamano.index') }}" class="text-[#ddd] no-underline text-[12px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Segunda Mano</a>
         <a href="#" class="text-[#ddd] no-underline text-[12px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Repuestos</a>
     </div>
 
@@ -26,6 +27,18 @@
     {{-- Controlores derecha --}}
     <div class="justify-self-end flex items-center gap-4">
         @auth
+            <a href="{{ route('chat.index') }}" class="text-[#ddd] no-underline text-[12px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors relative">
+                Chats
+                {{-- Badge si hay mensajes no leídos --}}
+                @php
+                    $noLeidos = \App\Models\Mensaje::whereHas('conversacion', function($q) {
+                        $q->where('comprador_id', Auth::id())->orWhere('vendedor_id', Auth::id());
+                    })->where('remitente_id', '!=', Auth::id())->whereNull('leido_at')->count();
+                @endphp
+                @if($noLeidos > 0)
+                    <span class="absolute -top-2 -right-3 bg-yellow-500 w-2 h-2 rounded-full"></span>
+                @endif
+            </a>
             <a href="{{ route('perfil') }}" class="text-[#ddd] no-underline text-[12px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">{{ Auth::user()->name }}</a>
             <a href="{{ route('cart.index') }}" class="text-[#ddd] no-underline text-[12px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors relative">
                 Carrito
