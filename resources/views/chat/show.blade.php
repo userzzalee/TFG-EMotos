@@ -83,8 +83,5 @@
 @endsection
 
 @push('scripts')
-<script>
-    const box = document.getElementById('chat-box');
-    if (box) box.scrollTop = box.scrollHeight;
-</script>
+<script src="{{ asset('js/chat.js') }}" defer></script>
 @endpush
