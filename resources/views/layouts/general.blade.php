@@ -8,7 +8,7 @@
 </head>
 <body class="min-h-screen" style="background-color:#0a0a0a; color:#e5e7eb;">
 @include('layouts.navigation')
-<div class="pt-[90px] min-h-screen">
+<div class="pt-[75px] min-h-screen">
     <main class="px-6 py-8 max-w-5xl mx-auto">
         @if(session('success'))
             <div class="mb-4 px-4 py-3 rounded border border-[#f0c36d]/40 bg-[#f0c36d]/10 text-[#f0c36d] text-sm">

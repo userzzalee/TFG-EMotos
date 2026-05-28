@@ -39,9 +39,6 @@
                 <p>{{ $msg->contenido }}</p>
                 <p class="text-right mt-1 opacity-40 text-[10px]">
                     {{ $msg->created_at->format('H:i') }}
-                    @if($esMio)
-                        {{ $msg->leido_at ? '✓✓' : '✓' }}
-                    @endif
                 </p>
             </div>
         </div>
@@ -50,6 +47,12 @@
             <p class="text-xs text-white/25 uppercase tracking-widest">Sé el primero en escribir.</p>
         </div>
     @endforelse
+    
+    @if($mensajes->hasMorePages())
+        <div class="text-center">
+            <a href="{{ $mensajes->url($mensajes->currentPage() + 1) }}" class="text-xs text-white/40 hover:text-[#f0c36d] transition-colors">Cargar más mensajes</a>
+        </div>
+    @endif
 </div>
 
 {{-- Formulario de envío --}}

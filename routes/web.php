@@ -6,6 +6,7 @@ use App\Http\Controllers\TallerController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\SegundaManoController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -26,6 +27,14 @@ Route::prefix('carrito')->name('cart.')->group(function () {
     Route::post('/update/{id}',  [CartController::class, 'update'])           ->name('update');
     Route::post('/remove/{id}',  [CartController::class, 'remove'])           ->name('remove');
     Route::post('/clear',        [CartController::class, 'clear'])            ->name('clear');
+});
+
+// ── Pedidos ───────────────────────────────────────────────────────────────────
+Route::middleware('auth')->prefix('pedidos')->name('order.')->group(function () {
+    Route::get('/checkout', [App\Http\Controllers\OrderController::class, 'checkout'])->name('checkout');
+    Route::post('/', [App\Http\Controllers\OrderController::class, 'store'])->name('store');
+    Route::get('/', [App\Http\Controllers\OrderController::class, 'index'])->name('index');
+    Route::get('/{id}', [App\Http\Controllers\OrderController::class, 'show'])->name('show');
 });
 
 // ── Segunda Mano ──────────────────────────────────────────────────────────────

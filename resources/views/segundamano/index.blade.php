@@ -12,13 +12,13 @@
 
 <div class="fixed inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900 z-0 pointer-events-none"></div>
 
-<main class="relative z-10 text-white pt-[80px] pb-16">
+<main class="relative z-10 text-white pt-[75px] pb-16">
 
     {{-- Cabecera --}}
     <div class="max-w-5xl mx-auto px-6 mb-8 flex items-end justify-between">
         <div>
             <p class="text-[10px] tracking-[0.3em] text-yellow-500 uppercase mb-1">Mercado</p>
-            <h1 class="text-3xl font-light tracking-[0.2em] uppercase">Segunda Mano</h1>
+            <h1 class="text-2xl font-light tracking-[0.2em] uppercase">Segunda Mano</h1>
         </div>
         @auth
             <a href="{{ route('segundamano.crear') }}"
@@ -92,7 +92,7 @@
                         <div class="relative overflow-hidden bg-gray-900 aspect-[4/3] mb-3">
                             @if($anuncio->imagen)
                                 <img src="{{ asset('storage/' . $anuncio->imagen) }}"
-                                     alt="{{ $anuncio->titulo }}"
+                                     alt=""
                                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                             @else
                                 <div class="w-full h-full flex items-center justify-center text-gray-700 text-xs tracking-widest uppercase">

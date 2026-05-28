@@ -12,7 +12,7 @@
 
 <div class="fixed inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900 z-0 pointer-events-none"></div>
 
-<main class="relative z-10 text-white pt-[100px] pb-20">
+<main class="relative z-10 text-white pt-[75px] pb-20">
     
     <div class="max-w-2xl mx-auto px-8">
         <h1 class="text-2xl font-light tracking-[0.2em] mb-6 text-center">EDITAR PRODUCTO</h1>

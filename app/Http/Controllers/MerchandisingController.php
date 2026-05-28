@@ -7,9 +7,31 @@ use Illuminate\Http\Request;
 
 class MerchandisingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $productos = Producto::where('activo', true)->latest()->get();
+        $busqueda = $request->input('buscar');
+        $precioMin = $request->input('precio_min');
+        $precioMax = $request->input('precio_max');
+
+        $query = Producto::where('activo', true);
+
+        if ($busqueda) {
+            $query->where(function($q) use ($busqueda) {
+                $q->where('nombre', 'like', "%{$busqueda}%")
+                  ->orWhere('descripcion', 'like', "%{$busqueda}%");
+            });
+        }
+
+        if ($precioMin) {
+            $query->where('precio', '>=', $precioMin);
+        }
+
+        if ($precioMax) {
+            $query->where('precio', '<=', $precioMax);
+        }
+
+        $productos = $query->latest()->get();
+
         return view('merchandising', compact('productos'));
     }
 

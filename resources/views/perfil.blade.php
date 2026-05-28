@@ -46,6 +46,12 @@
         </div>
 
         <div class="flex gap-3 justify-center">
+            @if(Auth::user()->esAdmin())
+                <a href="{{ url('/admin/usuarios') }}"
+                   class="w-[120px] h-[32px] text-white bg-gray-700 hover:bg-gray-600 font-medium rounded-[20px] cursor-pointer border-none transition-colors text-xs flex items-center justify-center">
+                    Panel Admin
+                </a>
+            @endif
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit"

@@ -12,7 +12,7 @@
 
 <div class="fixed inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900 z-0 pointer-events-none"></div>
 
-<main class="relative z-10 text-white pt-[100px] pb-20">
+<main class="relative z-10 text-white pt-[75px] pb-20">
     <div class="max-w-5xl mx-auto px-6">
 
         {{-- Breadcrumb --}}
@@ -30,7 +30,7 @@
             <div class="aspect-square bg-gray-900 overflow-hidden rounded">
                 @if($anuncio->imagen)
                     <img src="{{ asset('storage/' . $anuncio->imagen) }}"
-                         alt="{{ $anuncio->titulo }}"
+                         alt=""
                          class="w-full h-full object-cover">
                 @else
                     <div class="w-full h-full flex items-center justify-center text-gray-700 text-xs tracking-widest uppercase">
@@ -156,7 +156,7 @@
                             <div class="aspect-[4/3] bg-gray-900 overflow-hidden mb-2">
                                 @if($otro->imagen)
                                     <img src="{{ asset('storage/' . $otro->imagen) }}"
-                                         alt="{{ $otro->titulo }}"
+                                         alt=""
                                          class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center text-gray-700 text-[10px] uppercase tracking-widest">Sin imagen</div>

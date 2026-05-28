@@ -19,7 +19,7 @@ class ChatController extends Controller
     {
         $userId = Auth::id();
 
-        $conversaciones = Conversacion::with(['comprador', 'vendedor', 'producto', 'ultimoMensaje'])
+        $conversaciones = Conversacion::with(['comprador:id,name', 'vendedor:id,name', 'producto:id,nombre,imagen', 'ultimoMensaje'])
             ->where('comprador_id', $userId)
             ->orWhere('vendedor_id', $userId)
             ->orderByDesc('ultimo_mensaje_at')
@@ -68,7 +68,7 @@ class ChatController extends Controller
             ->whereNull('leido_at')
             ->update(['leido_at' => now()]);
 
-        $mensajes = $conversacion->mensajes()->with('remitente')->get();
+        $mensajes = $conversacion->mensajes()->with('remitente')->latest()->paginate(50);
         $otro     = $conversacion->otroParticipante($userId);
 
         return view('chat.show', compact('conversacion', 'mensajes', 'otro', 'userId'));
@@ -91,12 +91,12 @@ class ChatController extends Controller
 
         Mensaje::create([
             'conversacion_id' => $conversacion->id,
-            'remitente_id'    => $userId,
-            'contenido'       => $request->input('contenido'),
+            'remitente_id' => $userId,
+            'contenido' => $request->input('contenido'),
         ]);
 
         $conversacion->update(['ultimo_mensaje_at' => now()]);
 
-        return redirect()->route('chat.show', $conversacion->id);
+        return back();
     }
 }

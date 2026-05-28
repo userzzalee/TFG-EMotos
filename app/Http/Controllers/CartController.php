@@ -71,10 +71,13 @@ class CartController extends Controller
         $cart = Session::get('cart', []);
 
         if (isset($cart[$id])) {
-            $producto = Producto::findOrFail($id);
-            
-            if ($producto->stock < $request->cantidad) {
-                return back()->with('error', 'No hay suficiente stock disponible.');
+            // Only check stock if it's a regular product (not a custom configuration)
+            if (!str_starts_with($id, 'config_')) {
+                $producto = Producto::findOrFail($id);
+                
+                if ($producto->stock < $request->cantidad) {
+                    return back()->with('error', 'No hay suficiente stock disponible.');
+                }
             }
 
             $cart[$id]['cantidad'] = $request->cantidad;

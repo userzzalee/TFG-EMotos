@@ -127,9 +127,9 @@
                 <p class="text-xl font-semibold text-yellow-500">€{{ number_format($total, 2) }}</p>
             </div>
             
-            <button class="w-full bg-yellow-500 text-black rounded-xl py-3 font-medium hover:bg-yellow-400 transition-all mb-3 text-sm">
+            <a href="{{ route('order.checkout') }}" class="w-full bg-yellow-500 text-black rounded-xl py-3 font-medium hover:bg-yellow-400 transition-all mb-3 text-sm text-center block">
                 PROCEDER AL PAGO
-            </button>
+            </a>
             
             <div class="flex gap-3">
                 <a href="{{ route('merchandising') }}" class="flex-1 text-center bg-gray-800 text-white rounded-xl py-2 hover:bg-gray-700 transition-all text-sm">

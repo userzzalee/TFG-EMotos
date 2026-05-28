@@ -12,11 +12,11 @@
 
 <div class="fixed inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900 z-0 pointer-events-none"></div>
 
-<main class="relative z-10 text-white pt-[100px] pb-20">
+<main class="relative z-10 text-white pt-[75px] pb-20">
     <div class="max-w-2xl mx-auto px-8">
 
         <p class="text-[10px] tracking-[0.3em] text-yellow-500 uppercase mb-2 text-center">Segunda Mano</p>
-        <h1 class="text-4xl font-light tracking-[0.3em] mb-8 text-center uppercase">Editar Anuncio</h1>
+        <h1 class="text-2xl font-light tracking-[0.2em] mb-6 text-center uppercase">Editar Anuncio</h1>
 
         @if($errors->any())
             <div class="bg-red-900/50 border border-red-500 text-red-400 px-6 py-4 rounded-lg mb-8 text-sm">

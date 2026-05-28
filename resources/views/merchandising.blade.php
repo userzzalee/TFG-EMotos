@@ -13,20 +13,57 @@
 
 <div class="fixed inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900 z-0 pointer-events-none"></div>
 
-<main class="relative z-10 text-white pt-[80px] pb-16">
+<main class="relative z-10 text-white pt-[75px] pb-16">
 
     <!-- Filtros -->
     <div class="max-w-7xl mx-auto px-6 mb-8">
-        <div class="flex gap-4 justify-center flex-wrap">
-            <button class="boton-filtro px-4 py-1.5 border border-gray-700 text-xs tracking-widest hover:border-yellow-500 hover:text-yellow-500 transition-all" data-filter="all">TODOS</button>
-            <button class="boton-filtro px-4 py-1.5 border border-gray-700 text-xs tracking-widest hover:border-yellow-500 hover:text-yellow-500 transition-all" data-filter="ropa">ROPA</button>
-            @auth
-                @if(Auth::user()->esAdmin())
-                    <a href="{{ route('merchandising.create') }}" class="px-5 py-2 border border-yellow-500 text-yellow-500 text-xs tracking-widest hover:bg-yellow-500 hover:text-black transition-all">CREAR PUBLICACIÓN</a>
-                @endif
-            @endauth
-            <button class="boton-filtro px-4 py-1.5 border border-gray-700 text-xs tracking-widest hover:border-yellow-500 hover:text-yellow-500 transition-all" data-filter="accesorios">ACCESORIOS</button>
-            <button class="boton-filtro px-4 py-1.5 border border-gray-700 text-xs tracking-widest hover:border-yellow-500 hover:text-yellow-500 transition-all" data-filter="cascos">CASCOS</button>
+        <div class="flex flex-col gap-4 items-center">
+            <!-- Botones de filtro rápidos -->
+            <div class="flex gap-3 flex-wrap justify-center">
+                <button class="boton-filtro px-4 py-1.5 border border-gray-700 text-xs tracking-widest hover:border-yellow-500 hover:text-yellow-500 transition-all" data-filter="all">TODOS</button>
+                <button class="boton-filtro px-4 py-1.5 border border-gray-700 text-xs tracking-widest hover:border-yellow-500 hover:text-yellow-500 transition-all" data-filter="ropa">ROPA</button>
+                <button class="boton-filtro px-4 py-1.5 border border-gray-700 text-xs tracking-widest hover:border-yellow-500 hover:text-yellow-500 transition-all" data-filter="accesorios">ACCESORIOS</button>
+                <button class="boton-filtro px-4 py-1.5 border border-gray-700 text-xs tracking-widest hover:border-yellow-500 hover:text-yellow-500 transition-all" data-filter="cascos">CASCOS</button>
+                @auth
+                    @if(Auth::user()->esAdmin())
+                        <a href="{{ route('merchandising.create') }}" class="px-5 py-2 border border-yellow-500 text-yellow-500 text-xs tracking-widest hover:bg-yellow-500 hover:text-black transition-all">CREAR</a>
+                    @endif
+                @endauth
+            </div>
+
+            <!-- Buscador y select -->
+            <form method="GET" action="{{ route('merchandising') }}"
+                  class="flex flex-wrap gap-3 items-center justify-center">
+                <input type="text" name="buscar" value="{{ request('buscar') }}"
+                       placeholder="Buscar productos…"
+                       class="bg-gray-900 border border-gray-700 text-white text-xs px-4 py-2 rounded
+                              focus:border-yellow-500 focus:outline-none transition-all w-56 placeholder-gray-600">
+
+                <input type="number" name="precio_min" value="{{ request('precio_min') }}"
+                       placeholder="Mín €"
+                       min="0" step="0.01"
+                       class="bg-gray-900 border border-gray-700 text-white text-xs px-4 py-2 rounded
+                              focus:border-yellow-500 focus:outline-none transition-all w-24 placeholder-gray-600">
+
+                <input type="number" name="precio_max" value="{{ request('precio_max') }}"
+                       placeholder="Máx €"
+                       min="0" step="0.01"
+                       class="bg-gray-900 border border-gray-700 text-white text-xs px-4 py-2 rounded
+                              focus:border-yellow-500 focus:outline-none transition-all w-24 placeholder-gray-600">
+
+                <button type="submit"
+                        class="px-5 py-2 border border-yellow-500 text-yellow-500 text-xs tracking-widest
+                               hover:bg-yellow-500 hover:text-black transition-all">
+                    Filtrar
+                </button>
+            </form>
+
+            @if(request()->hasAny(['buscar','precio_min','precio_max']))
+                <a href="{{ route('merchandising') }}"
+                   class="text-xs text-gray-500 hover:text-white transition-colors mt-2">
+                    Limpiar filtros
+                </a>
+            @endif
         </div>
     </div>
 
@@ -76,7 +113,7 @@
                 @endforeach
             </div>
         @else
-            <div class="text-center py-20">
+            <div class="grid place-items-center min-h-[500px]">
                 <p class="text-gray-400 text-lg tracking-wider">No hay productos disponibles</p>
             </div>
         @endif

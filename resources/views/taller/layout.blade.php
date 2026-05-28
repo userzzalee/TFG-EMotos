@@ -10,10 +10,10 @@
 
 @include('layouts.navigation')
 
-<div class="pt-[90px] min-h-screen flex">
+<div class="pt-[75px] min-h-screen flex">
 
     {{-- Sidebar --}}
-    <aside class="w-48 shrink-0 border-r border-white/10 px-4 pt-0 pb-2 flex flex-col justify-center gap-1">
+    <aside class="w-48 shrink-0 border-r border-white/10 px-4 pt-4 pb-2 flex flex-col justify-start gap-3">
 
         @auth
             @if(Auth::user()->rol === 'mecanico' || Auth::user()->esAdmin())
