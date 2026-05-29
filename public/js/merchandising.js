@@ -4,9 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     btnFiltrado.forEach(btn => {
         btn.addEventListener('click', function() {
-            // Quitar color dorado de todos los botones
             btnFiltrado.forEach(b => b.classList.remove('border-yellow-500', 'text-yellow-500'));
-            // Poner color dorado al botón clicado
             this.classList.add('border-yellow-500', 'text-yellow-500');
 
             const filtro = this.dataset.filter;
@@ -21,6 +19,44 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Activar primer filtro por defecto
     btnFiltrado[0].classList.add('border-yellow-500', 'text-yellow-500');
+
+    // Sistema de estrellas con localStorage
+    inicializarEstrellas();
 });
+
+function inicializarEstrellas() {
+    const contenedores = document.querySelectorAll('.estrellas');
+
+    contenedores.forEach(contenedor => {
+        const productoId = contenedor.dataset.productoId;
+        const clave = 'estrellas_' + productoId;
+        let valoracion = localStorage.getItem(clave);
+
+        if (!valoracion) {
+            valoracion = Math.floor(Math.random() * 3) + 3;
+            localStorage.setItem(clave, valoracion);
+        }
+
+        valoracion = parseInt(valoracion);
+        renderizarEstrellas(contenedor, valoracion, productoId);
+    });
+}
+
+function renderizarEstrellas(contenedor, valoracion) {
+    contenedor.innerHTML = '';
+
+    for (let i = 1; i <= 5; i++) {
+        const punto = document.createElement('span');
+        punto.textContent = '●';
+        punto.classList.add('text-sm');
+
+        if (i <= valoracion) {
+            punto.classList.add('text-yellow-500');
+        } else {
+            punto.classList.add('text-gray-600');
+        }
+
+        contenedor.appendChild(punto);
+    }
+}

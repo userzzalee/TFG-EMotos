@@ -16,7 +16,6 @@
         @endauth
         <a href="{{ route('merchandising') }}" class="text-[#ddd] no-underline text-[12px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Merchandising</a>
         <a href="{{ route('segundamano.index') }}" class="text-[#ddd] no-underline text-[12px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Segunda Mano</a>
-        <a href="#" class="text-[#ddd] no-underline text-[12px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Repuestos</a>
     </div>
 
     {{-- Logo --}}

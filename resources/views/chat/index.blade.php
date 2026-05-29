@@ -21,8 +21,8 @@
             @endphp
 
             <a href="{{ route('chat.show', $conv->id) }}"
-               class="flex items-center justify-between gap-4 bg-[#111] border border-white/10 rounded-[10px] px-4 py-3
-                      no-underline transition-all duration-200 hover:border-[rgba(240,195,109,0.35)] hover:-translate-y-0.5 group">
+                class="flex items-center justify-between gap-4 bg-[#111] border border-white/10 rounded-[10px] px-4 py-3
+                    no-underline transition-all duration-200 hover:border-[rgba(240,195,109,0.35)] hover:-translate-y-0.5 group">
 
                 {{-- Avatar inicial + nombre --}}
                 <div class="flex items-center gap-3 min-w-0">

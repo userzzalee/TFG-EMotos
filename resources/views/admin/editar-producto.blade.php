@@ -72,6 +72,18 @@
                 </select>
             </div>
 
+            <!-- Puntuación -->
+            <div>
+                <label class="block text-xs tracking-widest text-gray-400 mb-2">PUNTUACIÓN</label>
+                <div id="selector-puntuacion" class="flex gap-1" data-producto-id="{{ $producto->id }}">
+                    <span class="punto-selector text-xl cursor-pointer text-gray-600 hover:text-yellow-500 transition-colors" data-valor="1">●</span>
+                    <span class="punto-selector text-xl cursor-pointer text-gray-600 hover:text-yellow-500 transition-colors" data-valor="2">●</span>
+                    <span class="punto-selector text-xl cursor-pointer text-gray-600 hover:text-yellow-500 transition-colors" data-valor="3">●</span>
+                    <span class="punto-selector text-xl cursor-pointer text-gray-600 hover:text-yellow-500 transition-colors" data-valor="4">●</span>
+                    <span class="punto-selector text-xl cursor-pointer text-gray-600 hover:text-yellow-500 transition-colors" data-valor="5">●</span>
+                </div>
+            </div>
+
             <!-- Imagen -->
             <div>
                 <label class="block text-xs tracking-widest text-gray-400 mb-2">IMAGEN</label>
@@ -95,6 +107,8 @@
     </div>
 
 </main>
+
+<script src="{{ asset('js/editar-producto.js') }}" defer></script>
 
 </body>
 </html>

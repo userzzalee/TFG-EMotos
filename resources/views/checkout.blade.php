@@ -48,34 +48,19 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div class="col-span-2">
                         <label class="block text-xs tracking-widest text-gray-400 mb-2 uppercase">Dirección</label>
-                        <input type="text" name="shipping_address" required
-                               class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white text-sm
-                                      focus:border-yellow-500 focus:outline-none transition-all"
-                               placeholder="Calle, número, piso...">
+                        <input type="text" name="shipping_address" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white text-sm focus:border-yellow-500 focus:outline-none transition-all" placeholder="Calle, número, piso...">
                     </div>
-                    
                     <div>
                         <label class="block text-xs tracking-widest text-gray-400 mb-2 uppercase">Ciudad</label>
-                        <input type="text" name="shipping_city" required
-                               class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white text-sm
-                                      focus:border-yellow-500 focus:outline-none transition-all"
-                               placeholder="Ciudad">
+                        <input type="text" name="shipping_city" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white text-sm focus:border-yellow-500 focus:outline-none transition-all" placeholder="Ciudad">
                     </div>
-                    
                     <div>
                         <label class="block text-xs tracking-widest text-gray-400 mb-2 uppercase">Código Postal</label>
-                        <input type="text" name="shipping_postal_code" required
-                               class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white text-sm
-                                      focus:border-yellow-500 focus:outline-none transition-all"
-                               placeholder="28001">
+                        <input type="text" name="shipping_postal_code" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white text-sm focus:border-yellow-500 focus:outline-none transition-all" placeholder="28001">
                     </div>
-                    
                     <div class="col-span-2">
                         <label class="block text-xs tracking-widest text-gray-400 mb-2 uppercase">Teléfono</label>
-                        <input type="tel" name="shipping_phone" required
-                               class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white text-sm
-                                      focus:border-yellow-500 focus:outline-none transition-all"
-                               placeholder="+34 600 000 000">
+                        <input type="tel" name="shipping_phone" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white text-sm focus:border-yellow-500 focus:outline-none transition-all" placeholder="+34 600 000 000">
                     </div>
                 </div>
             </div>
@@ -92,7 +77,6 @@
                             <p class="text-gray-400 text-xs">Visa, Mastercard, American Express</p>
                         </div>
                     </label>
-                    
                     <label class="flex items-center gap-3 p-4 border border-gray-700 rounded-lg cursor-pointer hover:border-yellow-500 transition-all">
                         <input type="radio" name="payment_method" value="cash" required class="w-4 h-4 accent-yellow-500">
                         <div>
@@ -105,16 +89,8 @@
 
             <!-- Botón de confirmar -->
             <div class="flex gap-4">
-                <a href="{{ route('cart.index') }}"
-                   class="flex-1 bg-gray-800 text-white py-4 rounded-lg text-center text-sm tracking-widest uppercase
-                          hover:bg-gray-700 transition-all">
-                    Volver al carrito
-                </a>
-                <button type="submit"
-                        class="flex-1 bg-yellow-500 text-black py-4 rounded-lg text-sm tracking-widest uppercase
-                               font-medium hover:bg-yellow-400 transition-all">
-                    Confirmar Pedido
-                </button>
+                <a href="{{ route('cart.index') }}" class="flex-1 bg-gray-800 text-white py-4 rounded-lg text-center text-sm tracking-widest uppercase hover:bg-gray-700 transition-all">Volver al carrito</a>
+                <button type="submit" class="flex-1 bg-yellow-500 text-black py-4 rounded-lg text-sm tracking-widest uppercase font-medium hover:bg-yellow-400 transition-all">Confirmar Pedido</button>
             </div>
         </form>
 

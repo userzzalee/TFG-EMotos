@@ -21,52 +21,25 @@
             <h1 class="text-2xl font-light tracking-[0.2em] uppercase">Segunda Mano</h1>
         </div>
         @auth
-            <a href="{{ route('segundamano.crear') }}"
-               class="px-5 py-2 border border-yellow-500 text-yellow-500 text-xs tracking-widest
-                      hover:bg-yellow-500 hover:text-black transition-all">
-                + Publicar anuncio
-            </a>
+            <a href="{{ route('segundamano.crear') }}" class="px-5 py-2 border border-yellow-500 text-yellow-500 text-xs tracking-widest hover:bg-yellow-500 hover:text-black transition-all">+ Publicar anuncio</a>
         @else
-            <a href="{{ route('login') }}"
-               class="px-5 py-2 border border-white/20 text-white/40 text-xs tracking-widest
-                      hover:border-yellow-500 hover:text-yellow-500 transition-all">
-                Inicia sesión para vender
-            </a>
+            <a href="{{ route('login') }}" class="px-5 py-2 border border-white/20 text-white/40 text-xs tracking-widest hover:border-yellow-500 hover:text-yellow-500 transition-all">Inicia sesión para vender</a>
         @endauth
     </div>
 
     {{-- Buscador + filtros --}}
     <div class="max-w-5xl mx-auto px-6 mb-8">
-        <form method="GET" action="{{ route('segundamano.index') }}"
-              class="flex flex-wrap gap-3 items-center">
-
-            <input type="text" name="buscar" value="{{ request('buscar') }}"
-                   placeholder="Buscar anuncios…"
-                   class="bg-gray-900 border border-gray-700 text-white text-xs px-4 py-2 rounded
-                          focus:border-yellow-500 focus:outline-none transition-all w-56 placeholder-gray-600">
-
-            <select name="categoria"
-                    class="bg-gray-900 border border-gray-700 text-white text-xs px-4 py-2 rounded
-                           focus:border-yellow-500 focus:outline-none transition-all">
+        <form method="GET" action="{{ route('segundamano.index') }}" class="flex flex-wrap gap-3 items-center">
+            <input type="text" name="buscar" value="{{ request('buscar') }}" placeholder="Buscar anuncios…" class="bg-gray-900 border border-gray-700 text-white text-xs px-4 py-2 rounded focus:border-yellow-500 focus:outline-none transition-all w-56 placeholder-gray-600">
+            <select name="categoria" class="bg-gray-900 border border-gray-700 text-white text-xs px-4 py-2 rounded focus:border-yellow-500 focus:outline-none transition-all">
                 <option value="">Todas las categorías</option>
                 @foreach($categorias as $cat)
-                    <option value="{{ $cat }}" {{ request('categoria') === $cat ? 'selected' : '' }}>
-                        {{ ucfirst($cat) }}
-                    </option>
+                    <option value="{{ $cat }}" {{ request('categoria') === $cat ? 'selected' : '' }}>{{ ucfirst($cat) }}</option>
                 @endforeach
             </select>
-
-            <button type="submit"
-                    class="px-5 py-2 border border-yellow-500 text-yellow-500 text-xs tracking-widest
-                           hover:bg-yellow-500 hover:text-black transition-all">
-                Filtrar
-            </button>
-
+            <button type="submit" class="px-5 py-2 border border-yellow-500 text-yellow-500 text-xs tracking-widest hover:bg-yellow-500 hover:text-black transition-all">Filtrar</button>
             @if(request()->hasAny(['buscar','categoria']))
-                <a href="{{ route('segundamano.index') }}"
-                   class="text-xs text-gray-500 hover:text-white transition-colors tracking-widest">
-                    Limpiar
-                </a>
+                <a href="{{ route('segundamano.index') }}" class="text-xs text-gray-500 hover:text-white transition-colors tracking-widest">Limpiar</a>
             @endif
         </form>
     </div>

@@ -32,37 +32,15 @@
             </div>
 
             <!-- Buscador y select -->
-            <form method="GET" action="{{ route('merchandising') }}"
-                  class="flex flex-wrap gap-3 items-center justify-center">
-                <input type="text" name="buscar" value="{{ request('buscar') }}"
-                       placeholder="Buscar productos…"
-                       class="bg-gray-900 border border-gray-700 text-white text-xs px-4 py-2 rounded
-                              focus:border-yellow-500 focus:outline-none transition-all w-56 placeholder-gray-600">
-
-                <input type="number" name="precio_min" value="{{ request('precio_min') }}"
-                       placeholder="Mín €"
-                       min="0" step="0.01"
-                       class="bg-gray-900 border border-gray-700 text-white text-xs px-4 py-2 rounded
-                              focus:border-yellow-500 focus:outline-none transition-all w-24 placeholder-gray-600">
-
-                <input type="number" name="precio_max" value="{{ request('precio_max') }}"
-                       placeholder="Máx €"
-                       min="0" step="0.01"
-                       class="bg-gray-900 border border-gray-700 text-white text-xs px-4 py-2 rounded
-                              focus:border-yellow-500 focus:outline-none transition-all w-24 placeholder-gray-600">
-
-                <button type="submit"
-                        class="px-5 py-2 border border-yellow-500 text-yellow-500 text-xs tracking-widest
-                               hover:bg-yellow-500 hover:text-black transition-all">
-                    Filtrar
-                </button>
+            <form method="GET" action="{{ route('merchandising') }}" class="flex flex-wrap gap-3 items-center justify-center">
+                <input type="text" name="buscar" value="{{ request('buscar') }}" placeholder="Buscar productos…" class="bg-gray-900 border border-gray-700 text-white text-xs px-4 py-2 rounded focus:border-yellow-500 focus:outline-none transition-all w-56 placeholder-gray-600">
+                <input type="number" name="precio_min" value="{{ request('precio_min') }}" placeholder="Mín €" min="0" step="0.01" class="bg-gray-900 border border-gray-700 text-white text-xs px-4 py-2 rounded focus:border-yellow-500 focus:outline-none transition-all w-24 placeholder-gray-600">
+                <input type="number" name="precio_max" value="{{ request('precio_max') }}" placeholder="Máx €" min="0" step="0.01" class="bg-gray-900 border border-gray-700 text-white text-xs px-4 py-2 rounded focus:border-yellow-500 focus:outline-none transition-all w-24 placeholder-gray-600">
+                <button type="submit" class="px-5 py-2 border border-yellow-500 text-yellow-500 text-xs tracking-widest hover:bg-yellow-500 hover:text-black transition-all">Filtrar</button>
             </form>
 
             @if(request()->hasAny(['buscar','precio_min','precio_max']))
-                <a href="{{ route('merchandising') }}"
-                   class="text-xs text-gray-500 hover:text-white transition-colors mt-2">
-                    Limpiar filtros
-                </a>
+                <a href="{{ route('merchandising') }}" class="text-xs text-gray-500 hover:text-white transition-colors mt-2">Limpiar filtros</a>
             @endif
         </div>
     </div>
@@ -104,6 +82,7 @@
                         
                         <div class="text-center">
                             <h3 class="text-sm font-light tracking-wider mb-1">{{ $producto->nombre }}</h3>
+                            <div class="estrellas flex justify-center gap-0.5 mb-1 select-none" data-producto-id="{{ $producto->id }}"></div>
                             <p class="text-yellow-500 text-base font-light">€{{ number_format($producto->precio, 2) }}</p>
                             @if($producto->categoria)
                                 <p class="text-gray-500 text-[10px] tracking-widest mt-1 uppercase">{{ $producto->categoria }}</p>
