@@ -108,7 +108,7 @@
                                 <a href="{{ route('chat.show', $conversacionExistente->id) }}"
                                    class="w-full py-3 border border-yellow-500 text-yellow-500 text-xs tracking-widest uppercase
                                           text-center hover:bg-yellow-500 hover:text-black transition-all">
-                                    💬 Continuar conversación
+                                    Continuar conversación
                                 </a>
                             @else
                                 <form action="{{ route('segundamano.contactar', $anuncio->id) }}" method="POST">
@@ -116,7 +116,7 @@
                                     <button type="submit"
                                             class="w-full py-3 bg-yellow-500 text-black text-xs tracking-widest uppercase
                                                    font-medium hover:bg-yellow-400 transition-all">
-                                        💬 Contactar con el vendedor
+                                        Contactar con el vendedor
                                     </button>
                                 </form>
                             @endif

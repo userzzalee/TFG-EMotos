@@ -118,22 +118,21 @@ class CartController extends Controller
     public function addConfiguration(Request $request)
     {
         $request->validate([
-            'modelo' => 'required|in:sport,cruiser',
-            'color' => 'required|in:negro,dorado,rojo,blanco',
-            'motor' => 'required|in:250,500,1000',
+            'modelo' => 'required|in:enduro,trail',
+            'color' => 'required|in:gris,dorado,rojo',
+            'motor' => 'required|in:40,80',
             'precio' => 'required|numeric|min:0',
         ]);
 
         $nombresColores = [
-            'negro' => 'Negro',
+            'gris' => 'Gris',
             'dorado' => 'Dorado',
-            'rojo' => 'Rojo',
-            'blanco' => 'Blanco'
+            'rojo' => 'Rojo'
         ];
 
         $nombresModelos = [
-            'sport' => 'Sport',
-            'cruiser' => 'Cruiser'
+            'enduro' => 'Enduro',
+            'trail' => 'Trail'
         ];
 
         $cart = Session::get('cart', []);
@@ -141,16 +140,26 @@ class CartController extends Controller
         // Generate a unique ID for the configuration
         $configId = 'config_' . time();
         
+        $imagenMap = [
+            'enduro' => [
+                '40' => ['gris' => 'images/40hpgrispng.png', 'dorado' => 'images/40hpamarillapng.png', 'rojo' => 'images/40hprojopng.png'],
+                '80' => ['gris' => 'images/80hpgrispng.png', 'dorado' => 'images/80hpamarillapng.png', 'rojo' => 'images/80hprojapng.png']
+            ],
+            'trail' => [
+                '40' => ['gris' => 'images/trail80hpnegra.png', 'dorado' => 'images/80hptrailpng.png', 'rojo' => 'images/trail80hproja.png'],
+                '80' => ['gris' => 'images/trail80hpnegra.png', 'dorado' => 'images/80hptrailpng.png', 'rojo' => 'images/trail80hproja.png']
+            ]
+        ];
+        
         $cart[$configId] = [
             'id' => $configId,
-            'nombre' => 'Moto ' . $nombresModelos[$request->modelo] . ' ' . $request->motor . 'cc',
-            'precio' => $request->precio,
-            'imagen' => 'images/' . ($request->motor == '250' ? '50cc.png' : ($request->motor . 'cc.png')),
+            'nombre' => 'Moto ' . $nombresModelos[$request->modelo] . ' ' . $request->motor . ' HP', 'precio' => $request->precio,
+            'imagen' => $imagenMap[$request->modelo][$request->motor][$request->color],
             'cantidad' => 1,
             'categoria' => 'Configuración',
             'modelo' => $request->modelo,
             'color' => $nombresColores[$request->color],
-            'motor' => $request->motor . 'cc'
+            'motor' => $request->motor . 'HP'
         ];
 
         Session::put('cart', $cart);

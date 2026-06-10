@@ -19,7 +19,7 @@ Route::post('/admin/productos', [MerchandisingController::class, 'store'])->name
 Route::get('/admin/productos/{id}/editar', [MerchandisingController::class, 'edit'])->name('merchandising.edit');
 Route::post('/admin/productos/{id}', [MerchandisingController::class, 'update'])->name('merchandising.update');
 
-// ── Carrito ───────────────────────────────────────────────────────────────────
+// Carrito
 Route::prefix('carrito')->name('cart.')->group(function () {
     Route::get('/',              [CartController::class, 'index'])            ->name('index');
     Route::post('/add',          [CartController::class, 'add'])              ->name('add');
@@ -29,7 +29,7 @@ Route::prefix('carrito')->name('cart.')->group(function () {
     Route::post('/clear',        [CartController::class, 'clear'])            ->name('clear');
 });
 
-// ── Pedidos ───────────────────────────────────────────────────────────────────
+// Pedidos
 Route::middleware('auth')->prefix('pedidos')->name('order.')->group(function () {
     Route::get('/checkout', [App\Http\Controllers\OrderController::class, 'checkout'])->name('checkout');
     Route::post('/', [App\Http\Controllers\OrderController::class, 'store'])->name('store');
@@ -37,7 +37,7 @@ Route::middleware('auth')->prefix('pedidos')->name('order.')->group(function () 
     Route::get('/{id}', [App\Http\Controllers\OrderController::class, 'show'])->name('show');
 });
 
-// ── Segunda Mano ──────────────────────────────────────────────────────────────
+// Segunda Mano
 Route::prefix('segunda-mano')->name('segundamano.')->group(function () {
     // Públicas
     Route::get('/', [SegundaManoController::class, 'index'])->name('index');
@@ -56,7 +56,7 @@ Route::prefix('segunda-mano')->name('segundamano.')->group(function () {
     // Esta va AL FINAL para no capturar las rutas específicas
     Route::get('/{anuncio}', [SegundaManoController::class, 'show'])->name('show');
 });
-// ── Chat ──────────────────────────────────────────────────────────────────────
+// Chat
 Route::middleware('auth')->prefix('chat')->name('chat.')->group(function () {
     Route::get('/',                         [ChatController::class, 'index'])  ->name('index');
     Route::post('/iniciar/{producto}',      [ChatController::class, 'iniciar'])->name('iniciar');
@@ -64,7 +64,7 @@ Route::middleware('auth')->prefix('chat')->name('chat.')->group(function () {
     Route::post('/{conversacion}/mensajes', [ChatController::class, 'enviar']) ->name('enviar');
 });
 
-// ── Perfil ────────────────────────────────────────────────────────────────────
+// Perfil
 Route::middleware('auth')->group(function () {
     Route::get('/profile',    [ProfileController::class, 'edit'])   ->name('profile.edit');
     Route::patch('/profile',  [ProfileController::class, 'update']) ->name('profile.update');
@@ -81,7 +81,7 @@ Route::get('/configurador', function () {
     return view('configurador');
 })->name('configurador');
 
-// ── Taller – Usuario ──────────────────────────────────────────────────────────
+// Taller Usuario
 Route::middleware('auth')->prefix('taller')->name('taller.')->group(function () {
     Route::get('/nueva',         [TallerController::class, 'crear'])   ->name('crear');
     Route::post('/nueva',        [TallerController::class, 'guardar']) ->name('guardar');
@@ -89,7 +89,7 @@ Route::middleware('auth')->prefix('taller')->name('taller.')->group(function () 
     Route::post('/{cita}/pagar', [TallerController::class, 'pagar'])   ->name('pagar');
 });
 
-// ── Taller – Mecánico ─────────────────────────────────────────────────────────
+// Taller Mecánico
 Route::middleware('auth')->prefix('taller/mecanico')->name('taller.')->group(function () {
     Route::get('/nuevas',            [TallerController::class, 'nuevasCitas'])     ->name('nuevas-citas');
     Route::post('/{cita}/aceptar',   [TallerController::class, 'aceptar'])         ->name('aceptar');
@@ -100,7 +100,7 @@ Route::middleware('auth')->prefix('taller/mecanico')->name('taller.')->group(fun
     Route::post('/{cita}/finalizar', [TallerController::class, 'finalizar'])       ->name('finalizar');
 });
 
-// ── Panel Admin ───────────────────────────────────────────────────────────────
+// Panel Admin
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/usuarios', [AdminController::class, 'index'])->name('usuarios');
     Route::patch('/usuarios/{usuario}/rol', [AdminController::class, 'actualizarRol'])->name('usuarios.rol');
