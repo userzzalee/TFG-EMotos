@@ -12,10 +12,14 @@
         </div>
     @endif
 
-    <div class="flex items-center gap-3 mb-6">
+    <div class="flex items-center justify-between mb-6">
         <a href="{{ route('order.index') }}"
            class="text-[10px] uppercase tracking-widest text-white/40 hover:text-[#f0c36d] transition-colors">
             ← Volver a mis pedidos
+        </a>
+        <a href="{{ route('order.factura', $order->id) }}"
+           class="inline-flex items-center gap-2 px-4 py-2 border border-yellow-500 text-yellow-500 text-[10px] uppercase tracking-widest hover:bg-yellow-500 hover:text-black transition-all rounded">
+            ↓ Descargar factura
         </a>
     </div>
 

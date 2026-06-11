@@ -35,6 +35,48 @@ class User extends Authenticatable
         return $this->hasMany(Pedido::class);
     }
 
+    /**
+     * Anuncios publicados por el usuario.
+     */
+    public function anuncios(): HasMany
+    {
+        return $this->hasMany(Anuncio::class);
+    }
+
+    /**
+     * Valoraciones recibidas como vendedor (feature 9).
+     */
+    public function valoracionesRecibidas(): HasMany
+    {
+        return $this->hasMany(Valoracion::class, 'vendedor_id');
+    }
+
+    /**
+     * Valoraciones escritas como comprador (feature 9).
+     */
+    public function valoracionesEmitidas(): HasMany
+    {
+        return $this->hasMany(Valoracion::class, 'autor_id');
+    }
+
+    /**
+     * Nota media (1-5) como vendedor. Null si no tiene valoraciones.
+     */
+    public function notaMedia(): ?float
+    {
+        $media = $this->valoracionesRecibidas()->avg('puntuacion');
+
+        return $media !== null ? round((float) $media, 1) : null;
+    }
+
+    /**
+     * Número total de valoraciones recibidas.
+     */
+    public function totalValoraciones(): int
+    {
+        return $this->valoracionesRecibidas()->count();
+    }
+
     public function esMecanico(): bool
     {
         return $this->rol === 'mecanico';

@@ -9,16 +9,16 @@ use App\Http\Requests\UpdateAnuncioRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class SegundaManoController extends Controller
 {
     // Listado público de anuncios
-
     public function index(Request $request): View
     {
-        $query = Anuncio::with('vendedor')->disponibles()->latest();
+        $query = Anuncio::with('vendedor')->disponibles();
 
         if ($request->filled('categoria')) {
             $query->where('categoria', $request->categoria);
@@ -31,18 +31,25 @@ class SegundaManoController extends Controller
             });
         }
 
-        $anuncios   = $query->paginate(12)->withQueryString();
-        $categorias = Anuncio::categorias();
+        // Filtros de rango de precio + ordenación (feature 10).
+        $query->precioMin($request->input('precio_min'))
+              ->precioMax($request->input('precio_max'))
+              ->ordenar($request->input('orden'));
 
-        return view('segundamano.index', compact('anuncios', 'categorias'));
+        $anuncios     = $query->paginate(12)->withQueryString();
+        $categorias   = Anuncio::categorias();
+        $ordenaciones = Anuncio::ordenaciones();
+
+        return view('segundamano.index', compact('anuncios', 'categorias', 'ordenaciones'));
     }
 
 
     // Detalle de un anuncio
-
     public function show(Anuncio $anuncio): View
     {
         abort_if(!$anuncio->activo && !$anuncio->vendido, 404);
+
+        $anuncio->load(['imagenes', 'valoraciones.autor']);
 
         $conversacionExistente = null;
         if (Auth::check() && Auth::id() !== $anuncio->user_id) {
@@ -52,7 +59,10 @@ class SegundaManoController extends Controller
                 ->first();
         }
 
-        return view('segundamano.show', compact('anuncio', 'conversacionExistente'));
+        // ¿Puede el usuario actual valorar al vendedor? (feature 9)
+        $puedeValorar = Auth::check() && Gate::allows('valorar-anuncio', $anuncio);
+
+        return view('segundamano.show', compact('anuncio', 'conversacionExistente', 'puedeValorar'));
     }
 
 
@@ -74,7 +84,13 @@ class SegundaManoController extends Controller
 
         $data['user_id'] = Auth::id();
 
-        Anuncio::create($data);
+        // No persistimos el array de galería en la tabla anuncios.
+        unset($data['imagenes']);
+
+        $anuncio = Anuncio::create($data);
+
+        // Galería de imágenes (feature 11).
+        $this->guardarGaleria($request, $anuncio);
 
         return redirect()->route('segundamano.mis-anuncios')
                          ->with('success', 'Anuncio publicado correctamente.');
@@ -85,6 +101,7 @@ class SegundaManoController extends Controller
     public function edit(Anuncio $anuncio): View
     {
         $this->authorize('update', $anuncio);
+        $anuncio->load('imagenes');
         $categorias = Anuncio::categorias();
         $estados    = Anuncio::estados();
         return view('segundamano.editar', compact('anuncio', 'categorias', 'estados'));
@@ -101,7 +118,24 @@ class SegundaManoController extends Controller
 
         $data['vendido'] = $request->boolean('vendido');
 
+        unset($data['imagenes'], $data['eliminar_imagenes']);
+
         $anuncio->update($data);
+
+        // Eliminar imágenes marcadas (feature 11).
+        if ($request->filled('eliminar_imagenes')) {
+            $imagenes = $anuncio->imagenes()
+                ->whereIn('id', $request->input('eliminar_imagenes'))
+                ->get();
+
+            foreach ($imagenes as $img) {
+                Storage::disk('public')->delete($img->ruta);
+                $img->delete();
+            }
+        }
+
+        // Añadir nuevas imágenes a la galería.
+        $this->guardarGaleria($request, $anuncio);
 
         return redirect()->route('segundamano.mis-anuncios')
                          ->with('success', 'Anuncio actualizado correctamente.');
@@ -109,12 +143,17 @@ class SegundaManoController extends Controller
 
 
     // Eliminar anuncio
-
     public function destroy(Anuncio $anuncio): RedirectResponse
     {
         $this->authorize('delete', $anuncio);
 
         if ($anuncio->imagen) Storage::disk('public')->delete($anuncio->imagen);
+
+        // Borrar también los ficheros de la galería (los registros caen por cascade).
+        foreach ($anuncio->imagenes as $img) {
+            Storage::disk('public')->delete($img->ruta);
+        }
+
         $anuncio->delete();
 
         return redirect()->route('segundamano.mis-anuncios')
@@ -123,14 +162,16 @@ class SegundaManoController extends Controller
 
 
     // Mis anuncios
-
     public function misAnuncios(): View
     {
-        $anuncios = Anuncio::where('user_id', Auth::id())->latest()->get();
+        $anuncios = Anuncio::where('user_id', Auth::id())
+            ->with('imagenes')
+            ->latest()
+            ->get();
         return view('segundamano.mis-anuncios', compact('anuncios'));
     }
 
-   
+
     // Contactar con el vendedor
     public function contactar(Anuncio $anuncio): RedirectResponse
     {
@@ -151,5 +192,35 @@ class SegundaManoController extends Controller
         );
 
         return redirect()->route('chat.show', $conversacion->id);
+    }
+
+
+    /**
+     * Guarda las imágenes subidas en la galería del anuncio (feature 11).
+     */
+    private function guardarGaleria(\Illuminate\Http\Request $request, Anuncio $anuncio): void
+    {
+        if (! $request->hasFile('imagenes')) {
+            return;
+        }
+
+        // Empezamos a partir del orden máximo actual para no pisar las existentes.
+        $orden = (int) $anuncio->imagenes()->max('orden');
+
+        foreach ($request->file('imagenes') as $archivo) {
+            $ruta = $archivo->store('anuncios', 'public');
+            $anuncio->imagenes()->create([
+                'ruta'  => $ruta,
+                'orden' => ++$orden,
+            ]);
+        }
+
+        // Si el anuncio no tenía imagen de portada, usamos la primera de la galería.
+        if (! $anuncio->imagen) {
+            $primera = $anuncio->imagenes()->orderBy('orden')->first();
+            if ($primera) {
+                $anuncio->update(['imagen' => $primera->ruta]);
+            }
+        }
     }
 }

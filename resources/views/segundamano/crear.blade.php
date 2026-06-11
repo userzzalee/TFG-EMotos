@@ -66,13 +66,19 @@
                     </select>
                 </div>
             </div>
-            {{-- Imagen --}}
+            {{-- Imágenes (galería) --}}
             <div>
-                <label class="block text-xs tracking-widest text-gray-400 mb-2 uppercase">Imagen</label>
+                <label class="block text-xs tracking-widest text-gray-400 mb-2 uppercase">Imágenes</label>
                 <div class="border-2 border-dashed border-gray-700 rounded-lg p-4 text-center hover:border-yellow-500 transition-all">
-                    <input type="file" name="imagen" accept="image/jpeg,image/png,image/jpg,image/gif" class="w-full text-gray-400 text-sm file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:bg-gray-800 file:text-yellow-500 file:cursor-pointer hover:file:bg-gray-700 transition-all">
-                    <p class="text-gray-600 text-xs mt-2">JPEG, PNG, GIF · Máx 3 MB · Opcional</p>
+                    <input type="file" name="imagenes[]" multiple accept="image/jpeg,image/png,image/jpg,image/gif" class="w-full text-gray-400 text-sm file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:bg-gray-800 file:text-yellow-500 file:cursor-pointer hover:file:bg-gray-700 transition-all">
+                    <p class="text-gray-600 text-xs mt-2">JPEG, PNG, GIF · Máx 3 MB cada una · Hasta 8 imágenes · La primera será la portada</p>
                 </div>
+                @error('imagenes.*')
+                    <p class="text-[11px] text-red-400 mt-1">{{ $message }}</p>
+                @enderror
+                @error('imagenes')
+                    <p class="text-[11px] text-red-400 mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             {{-- Botones --}}

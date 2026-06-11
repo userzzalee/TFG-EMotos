@@ -70,13 +70,14 @@ class ChatController extends Controller
         // Y también las notificaciones in-app de esos mensajes (campana del navbar).
         $this->marcarNotificacionesMensajeLeidas(Auth::user(), $conversacion->id);
 
-        // Traemos los mensajes en orden cronológico (más antiguo primero, más nuevo abajo).
-        // Si no se pide una página específica, vamos a la última para ver los más recientes.
-        $query = $conversacion->mensajes()->with('remitente')->oldest();
-        $mensajes = $query->paginate(50);
-        if (!request()->has('page') && $mensajes->lastPage() > 1) {
-            $mensajes = $query->paginate(50, ['*'], 'page', $mensajes->lastPage());
-        }
+        // Paginamos de más nuevo a más antiguo: así la página 1 trae siempre
+        // los mensajes más recientes (lo que el usuario quiere ver al abrir el
+        // chat) y "Cargar mensajes anteriores" avanza a páginas superiores con
+        // mensajes cada vez más antiguos. Luego invertimos la colección de cada
+        // página para pintarla en orden cronológico (antiguo arriba, nuevo abajo).
+        $mensajes = $conversacion->mensajes()->with('remitente')->latest()->paginate(50);
+        $mensajes->setCollection($mensajes->getCollection()->reverse()->values());
+
         $otro     = $conversacion->otroParticipante($userId);
 
         return view('chat.show', compact('conversacion', 'mensajes', 'otro', 'userId'));

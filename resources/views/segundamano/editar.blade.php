@@ -96,29 +96,64 @@
                 </label>
             </div>
 
-            {{-- Imagen actual --}}
+            {{-- Imagen de portada actual --}}
             @if($anuncio->imagen)
                 <div>
-                    <p class="text-xs tracking-widest text-gray-500 uppercase mb-3">Imagen actual</p>
+                    <p class="text-xs tracking-widest text-gray-500 uppercase mb-3">Imagen de portada actual</p>
                     <img src="{{ asset('storage/' . $anuncio->imagen) }}"
                          alt="{{ $anuncio->titulo }}"
                          class="h-32 object-cover rounded border border-gray-700">
                 </div>
             @endif
 
-            {{-- Nueva imagen --}}
+            {{-- Galería actual: marcar para eliminar (feature 11) --}}
+            @if($anuncio->imagenes->isNotEmpty())
+                <div>
+                    <p class="text-xs tracking-widest text-gray-500 uppercase mb-3">Galería actual</p>
+                    <div class="grid grid-cols-4 gap-3">
+                        @foreach($anuncio->imagenes as $img)
+                            <label class="relative block cursor-pointer group">
+                                <img src="{{ $img->url() }}" alt=""
+                                     class="h-24 w-full object-cover rounded border border-gray-700 peer-checked:opacity-40 transition-all">
+                                <input type="checkbox" name="eliminar_imagenes[]" value="{{ $img->id }}"
+                                       class="peer absolute top-2 left-2 accent-red-500">
+                                <span class="absolute inset-0 rounded ring-2 ring-red-500 opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"></span>
+                                <span class="absolute bottom-1 right-1 text-[9px] uppercase tracking-widest text-red-400 opacity-0 peer-checked:opacity-100 bg-black/70 px-1 rounded">Borrar</span>
+                            </label>
+                        @endforeach
+                    </div>
+                    <p class="text-gray-600 text-xs mt-2">Marca las imágenes que quieras eliminar.</p>
+                </div>
+            @endif
+
+            {{-- Cambiar imagen de portada --}}
             <div>
                 <label class="block text-xs tracking-widest text-gray-400 mb-3 uppercase">
-                    {{ $anuncio->imagen ? 'Cambiar imagen' : 'Imagen' }}
+                    {{ $anuncio->imagen ? 'Cambiar portada' : 'Imagen de portada' }}
                 </label>
-                <div class="border-2 border-dashed border-gray-700 rounded-lg p-8 text-center hover:border-yellow-500 transition-all">
+                <div class="border-2 border-dashed border-gray-700 rounded-lg p-6 text-center hover:border-yellow-500 transition-all">
                     <input type="file" name="imagen" accept="image/jpeg,image/png,image/jpg,image/gif"
                            class="w-full text-gray-400
                                   file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0
                                   file:bg-gray-800 file:text-yellow-500 file:cursor-pointer
                                   hover:file:bg-gray-700 transition-all">
-                    <p class="text-gray-600 text-xs mt-3">Dejar vacío para conservar la imagen actual</p>
+                    <p class="text-gray-600 text-xs mt-3">Dejar vacío para conservar la portada actual</p>
                 </div>
+            </div>
+
+            {{-- Añadir imágenes a la galería --}}
+            <div>
+                <label class="block text-xs tracking-widest text-gray-400 mb-3 uppercase">Añadir imágenes a la galería</label>
+                <div class="border-2 border-dashed border-gray-700 rounded-lg p-6 text-center hover:border-yellow-500 transition-all">
+                    <input type="file" name="imagenes[]" multiple accept="image/jpeg,image/png,image/jpg,image/gif"
+                           class="w-full text-gray-400
+                                  file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0
+                                  file:bg-gray-800 file:text-yellow-500 file:cursor-pointer
+                                  hover:file:bg-gray-700 transition-all">
+                    <p class="text-gray-600 text-xs mt-3">JPEG, PNG, GIF · Máx 3 MB cada una · Hasta 8 imágenes</p>
+                </div>
+                @error('imagenes.*')<p class="text-[11px] text-red-400 mt-1">{{ $message }}</p>@enderror
+                @error('imagenes')<p class="text-[11px] text-red-400 mt-1">{{ $message }}</p>@enderror
             </div>
 
             {{-- Botones --}}

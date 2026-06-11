@@ -37,8 +37,20 @@
                     <option value="{{ $cat }}" {{ request('categoria') === $cat ? 'selected' : '' }}>{{ ucfirst($cat) }}</option>
                 @endforeach
             </select>
+
+            {{-- Rango de precio (feature 10) --}}
+            <input type="number" name="precio_min" min="0" step="0.01" value="{{ request('precio_min') }}" placeholder="€ mín" class="bg-gray-900 border border-gray-700 text-white text-xs px-3 py-2 rounded focus:border-yellow-500 focus:outline-none transition-all w-24 placeholder-gray-600">
+            <input type="number" name="precio_max" min="0" step="0.01" value="{{ request('precio_max') }}" placeholder="€ máx" class="bg-gray-900 border border-gray-700 text-white text-xs px-3 py-2 rounded focus:border-yellow-500 focus:outline-none transition-all w-24 placeholder-gray-600">
+
+            {{-- Ordenación (feature 10) --}}
+            <select name="orden" class="bg-gray-900 border border-gray-700 text-white text-xs px-4 py-2 rounded focus:border-yellow-500 focus:outline-none transition-all">
+                @foreach($ordenaciones as $valor => $etiqueta)
+                    <option value="{{ $valor }}" {{ request('orden') === $valor ? 'selected' : '' }}>{{ $etiqueta }}</option>
+                @endforeach
+            </select>
+
             <button type="submit" class="px-5 py-2 border border-yellow-500 text-yellow-500 text-xs tracking-widest hover:bg-yellow-500 hover:text-black transition-all">Filtrar</button>
-            @if(request()->hasAny(['buscar','categoria']))
+            @if(request()->hasAny(['buscar','categoria','precio_min','precio_max','orden']))
                 <a href="{{ route('segundamano.index') }}" class="text-xs text-gray-500 hover:text-white transition-colors tracking-widest">Limpiar</a>
             @endif
         </form>
@@ -63,8 +75,9 @@
 
                         {{-- Imagen --}}
                         <div class="relative overflow-hidden bg-gray-900 aspect-[4/3] mb-3">
-                            @if($anuncio->imagen)
-                                <img src="{{ asset('storage/' . $anuncio->imagen) }}"
+                            @php $portada = $anuncio->imagenPortada(); @endphp
+                            @if($portada)
+                                <img src="{{ asset('storage/' . $portada) }}"
                                      alt=""
                                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                             @else

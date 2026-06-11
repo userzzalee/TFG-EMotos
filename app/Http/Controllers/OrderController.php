@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -73,5 +74,23 @@ class OrderController extends Controller
     {
         $orders = Order::where('user_id', Auth::id())->latest()->get();
         return view('order.index', compact('orders'));
+    }
+
+    /**
+     * Genera y descarga la factura del pedido en PDF (feature 13).
+     */
+    public function factura($id)
+    {
+        $order = Order::with('user')->findOrFail($id);
+
+        // Solo el dueño del pedido puede descargar su factura.
+        if ($order->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $pdf = Pdf::loadView('order.factura', compact('order'))
+            ->setPaper('a4');
+
+        return $pdf->download('factura-pedido-' . str_pad((string) $order->id, 5, '0', STR_PAD_LEFT) . '.pdf');
     }
 }

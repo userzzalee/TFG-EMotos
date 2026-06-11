@@ -28,6 +28,11 @@ class UpdateAnuncioRequest extends FormRequest
             'estado'      => 'required|in:nuevo,bueno,usado,para-piezas',
             'vendido'     => 'boolean',
             'imagen'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:3072',
+            // Galería de imágenes (feature 11).
+            'imagenes'             => 'nullable|array|max:8',
+            'imagenes.*'           => 'image|mimes:jpeg,png,jpg,gif|max:3072',
+            'eliminar_imagenes'    => 'nullable|array',
+            'eliminar_imagenes.*'  => 'integer|exists:anuncio_imagenes,id',
         ];
     }
 }

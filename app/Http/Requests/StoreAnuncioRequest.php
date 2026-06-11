@@ -23,7 +23,10 @@ class StoreAnuncioRequest extends FormRequest
             'precio'      => 'required|numeric|min:0',
             'categoria'   => 'nullable|string|max:100',
             'estado'      => 'required|in:nuevo,bueno,usado,para-piezas',
+            // Imagen principal (legacy) opcional + galería de imágenes (feature 11).
             'imagen'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:3072',
+            'imagenes'    => 'nullable|array|max:8',
+            'imagenes.*'  => 'image|mimes:jpeg,png,jpg,gif|max:3072',
         ];
     }
 }

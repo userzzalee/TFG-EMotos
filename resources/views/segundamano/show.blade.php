@@ -26,13 +26,35 @@
 
         <div class="grid grid-cols-2 gap-12">
 
-            {{-- Imagen --}}
-            <div class="aspect-square bg-gray-900 overflow-hidden rounded">
-                @if($anuncio->imagen)
-                    <img src="{{ asset('storage/' . $anuncio->imagen) }}" alt="" class="w-full h-full object-cover">
-                @else
-                    <div class="w-full h-full flex items-center justify-center text-gray-700 text-xs tracking-widest uppercase">
-                        Sin imagen
+            {{-- Galería de imágenes (feature 11) --}}
+            @php
+                $galeria = $anuncio->imagenes->pluck('ruta');
+                if ($galeria->isEmpty() && $anuncio->imagen) {
+                    $galeria = collect([$anuncio->imagen]);
+                }
+            @endphp
+
+            <div x-data="{ activa: '{{ $galeria->first() ? asset('storage/' . $galeria->first()) : '' }}' }">
+                <div class="aspect-square bg-gray-900 overflow-hidden rounded">
+                    @if($galeria->isNotEmpty())
+                        <img :src="activa" alt="" class="w-full h-full object-cover">
+                    @else
+                        <div class="w-full h-full flex items-center justify-center text-gray-700 text-xs tracking-widest uppercase">
+                            Sin imagen
+                        </div>
+                    @endif
+                </div>
+
+                @if($galeria->count() > 1)
+                    <div class="grid grid-cols-5 gap-2 mt-3">
+                        @foreach($galeria as $ruta)
+                            @php $url = asset('storage/' . $ruta); @endphp
+                            <button type="button" @click="activa = '{{ $url }}'"
+                                    class="aspect-square bg-gray-900 overflow-hidden rounded border transition-all"
+                                    :class="activa === '{{ $url }}' ? 'border-yellow-500' : 'border-transparent hover:border-white/20'">
+                                <img src="{{ $url }}" alt="" class="w-full h-full object-cover">
+                            </button>
+                        @endforeach
                     </div>
                 @endif
             </div>
@@ -75,6 +97,19 @@
                 <div class="border-t border-white/5 pt-4 mb-6">
                     <p class="text-[10px] tracking-widest text-gray-600 uppercase mb-1">Vendedor</p>
                     <p class="text-sm text-gray-300">{{ $anuncio->vendedor->name }}</p>
+                    @php
+                        $notaVendedor = $anuncio->vendedor->notaMedia();
+                        $totalVendedor = $anuncio->vendedor->totalValoraciones();
+                    @endphp
+                    @if($notaVendedor !== null)
+                        <div class="flex items-center gap-2 mt-1">
+                            @include('segundamano.partials.estrellas', ['nota' => $notaVendedor, 'size' => 'text-xs'])
+                            <span class="text-[11px] text-gray-400">{{ number_format($notaVendedor, 1) }}</span>
+                            <span class="text-[10px] text-gray-600">({{ $totalVendedor }} {{ $totalVendedor === 1 ? 'valoración' : 'valoraciones' }})</span>
+                        </div>
+                    @else
+                        <p class="text-[10px] text-gray-600 mt-1">Sin valoraciones todavía</p>
+                    @endif
                     <p class="text-[10px] text-gray-600 mt-0.5">
                         Publicado {{ $anuncio->created_at->diffForHumans() }}
                     </p>
@@ -133,6 +168,76 @@
                 </div>
 
             </div>
+        </div>
+
+        {{-- Valoraciones del vendedor (feature 9) --}}
+        <div class="mt-16 border-t border-white/5 pt-10">
+            <div class="flex items-end justify-between mb-6">
+                <p class="text-[10px] tracking-[0.3em] text-gray-600 uppercase">Valoraciones del vendedor</p>
+                @if($anuncio->vendedor->notaMedia() !== null)
+                    <div class="flex items-center gap-2">
+                        @include('segundamano.partials.estrellas', ['nota' => $anuncio->vendedor->notaMedia(), 'size' => 'text-sm'])
+                        <span class="text-sm text-gray-300">{{ number_format($anuncio->vendedor->notaMedia(), 1) }} / 5</span>
+                    </div>
+                @endif
+            </div>
+
+            {{-- Formulario para valorar (solo si la venta se hizo y el usuario puede) --}}
+            @auth
+                @if($puedeValorar)
+                    <div x-data="{ puntuacion: 0, hover: 0 }"
+                         class="border border-white/10 rounded p-5 mb-8 bg-white/[0.02]">
+                        <p class="text-xs text-gray-300 mb-3 tracking-wide">¿Cómo fue tu experiencia con {{ $anuncio->vendedor->name }}?</p>
+                        <form action="{{ route('segundamano.valorar', $anuncio->id) }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="puntuacion" :value="puntuacion">
+
+                            {{-- Estrellas interactivas --}}
+                            <div class="flex gap-1 mb-3 text-2xl leading-none" @mouseleave="hover = 0">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <button type="button"
+                                            @click="puntuacion = {{ $i }}"
+                                            @mouseenter="hover = {{ $i }}"
+                                            class="transition-colors focus:outline-none"
+                                            :class="(hover || puntuacion) >= {{ $i }} ? 'text-yellow-500' : 'text-gray-700'">★</button>
+                                @endfor
+                            </div>
+
+                            @error('puntuacion')
+                                <p class="text-[11px] text-red-400 mb-2">{{ $message }}</p>
+                            @enderror
+
+                            <textarea name="comentario" rows="3" maxlength="1000"
+                                      placeholder="Cuenta cómo fue la compra (opcional)…"
+                                      class="w-full bg-gray-900 border border-gray-700 text-white text-xs px-3 py-2 rounded focus:border-yellow-500 focus:outline-none transition-all placeholder-gray-600 mb-3">{{ old('comentario') }}</textarea>
+
+                            <button type="submit"
+                                    :disabled="puntuacion === 0"
+                                    class="px-5 py-2 bg-yellow-500 text-black text-xs tracking-widest uppercase font-medium hover:bg-yellow-400 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+                                Enviar valoración
+                            </button>
+                        </form>
+                    </div>
+                @endif
+            @endauth
+
+            {{-- Listado de valoraciones --}}
+            @forelse($anuncio->vendedor->valoracionesRecibidas()->with('autor')->latest()->take(10)->get() as $val)
+                <div class="border-b border-white/5 py-4">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs text-gray-300">{{ $val->autor->name ?? 'Usuario' }}</span>
+                        <div class="flex items-center gap-2">
+                            @include('segundamano.partials.estrellas', ['nota' => $val->puntuacion, 'size' => 'text-xs'])
+                            <span class="text-[10px] text-gray-600">{{ $val->created_at->diffForHumans() }}</span>
+                        </div>
+                    </div>
+                    @if($val->comentario)
+                        <p class="text-xs text-gray-400 leading-relaxed">{{ $val->comentario }}</p>
+                    @endif
+                </div>
+            @empty
+                <p class="text-xs text-gray-600">Este vendedor todavía no tiene valoraciones.</p>
+            @endforelse
         </div>
 
         {{-- Otros anuncios del mismo vendedor --}}

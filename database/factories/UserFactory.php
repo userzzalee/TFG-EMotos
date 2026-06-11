@@ -29,8 +29,25 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
+            'rol' => 'user',
             'remember_token' => Str::random(10),
         ];
+    }
+
+    /**
+     * Usuario con rol de mecánico.
+     */
+    public function mecanico(): static
+    {
+        return $this->state(fn (array $attributes) => ['rol' => 'mecanico']);
+    }
+
+    /**
+     * Usuario con rol de administrador.
+     */
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => ['rol' => 'admin']);
     }
 
     /**

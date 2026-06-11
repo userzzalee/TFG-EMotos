@@ -39,6 +39,7 @@ Route::middleware('auth')->prefix('pedidos')->name('order.')->group(function () 
     Route::get('/checkout', [App\Http\Controllers\OrderController::class, 'checkout'])->name('checkout');
     Route::post('/', [App\Http\Controllers\OrderController::class, 'store'])->name('store');
     Route::get('/', [App\Http\Controllers\OrderController::class, 'index'])->name('index');
+    Route::get('/{id}/factura', [App\Http\Controllers\OrderController::class, 'factura'])->name('factura');
     Route::get('/{id}', [App\Http\Controllers\OrderController::class, 'show'])->name('show');
 });
 
@@ -56,6 +57,7 @@ Route::prefix('segunda-mano')->name('segundamano.')->group(function () {
         Route::post('/anuncio/{anuncio}/editar', [SegundaManoController::class, 'update'])->name('update');
         Route::post('/anuncio/{anuncio}/borrar', [SegundaManoController::class, 'destroy'])->name('destroy');
         Route::post('/{anuncio}/contactar',      [SegundaManoController::class, 'contactar'])->name('contactar');
+        Route::post('/{anuncio}/valorar',        [App\Http\Controllers\ValoracionController::class, 'store'])->name('valorar');
     });
 
     // Esta va AL FINAL para no capturar las rutas específicas
@@ -119,6 +121,7 @@ Route::middleware('auth')->prefix('taller/mecanico')->name('taller.')->group(fun
 
 // Panel Admin
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/usuarios', [AdminController::class, 'index'])->name('usuarios');
     Route::patch('/usuarios/{usuario}/rol', [AdminController::class, 'actualizarRol'])->name('usuarios.rol');
     Route::delete('/usuarios/{usuario}', [AdminController::class, 'eliminar'])->name('usuarios.eliminar');
