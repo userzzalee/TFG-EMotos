@@ -26,7 +26,7 @@ return [
     'duracion_slot' => 60,
 
     // Cuántas citas pueden coincidir en el mismo hueco (motos en paralelo).
-    'capacidad_slot' => 2,
+    'capacidad_slot' => 1,
 
     // Cuántos días hacia adelante se ofrecen para reservar.
     'dias_vista' => 14,

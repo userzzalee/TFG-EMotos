@@ -21,7 +21,8 @@ window.agendaPicker = (dias = [], valorInicial = '') => ({
             const dia = this.dias.find((d) => d.fecha === fecha);
             if (dia) {
                 this.elegirDia(dia);
-                if (dia.slots.includes(hora)) {
+                const slot = dia.slots.find((s) => s.hora === hora);
+                if (slot && !slot.ocupado) {
                     this.horaActiva = hora;
                 }
             }

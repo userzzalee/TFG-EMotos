@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddConfigurationRequest;
+use App\Http\Requests\AddToCartRequest;
+use App\Http\Requests\UpdateCartRequest;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -26,12 +29,9 @@ class CartController extends Controller
     /**
      * Add a product to the cart
      */
-    public function add(Request $request)
+    public function add(AddToCartRequest $request)
     {
-        $request->validate([
-            'producto_id' => 'required|exists:productos,id',
-            'cantidad' => 'required|integer|min:1|max:10',
-        ]);
+        $request->validated();
 
         $producto = Producto::findOrFail($request->producto_id);
         
@@ -62,11 +62,9 @@ class CartController extends Controller
     /**
      * Update cart item quantity
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCartRequest $request, $id)
     {
-        $request->validate([
-            'cantidad' => 'required|integer|min:1|max:10',
-        ]);
+        $request->validated();
 
         $cart = Session::get('cart', []);
 
@@ -115,14 +113,9 @@ class CartController extends Controller
     /**
      * Add a custom motorcycle configuration to the cart
      */
-    public function addConfiguration(Request $request)
+    public function addConfiguration(AddConfigurationRequest $request)
     {
-        $request->validate([
-            'modelo' => 'required|in:enduro,trail',
-            'color' => 'required|in:gris,dorado,rojo',
-            'motor' => 'required|in:40,80',
-            'precio' => 'required|numeric|min:0',
-        ]);
+        $request->validated();
 
         $nombresColores = [
             'gris' => 'Gris',

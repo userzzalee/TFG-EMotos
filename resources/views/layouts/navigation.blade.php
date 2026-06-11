@@ -30,7 +30,7 @@
             @php
                 $notiNoLeidas = Auth::user()->unreadNotifications()->count();
             @endphp
-            <div x-data="notificaciones({ noLeidas: {{ $notiNoLeidas }}, userId: {{ Auth::id() }} })"
+            <div x-data="notificaciones({ noLeidas: {{ $notiNoLeidas }}, userId: {{ Auth::id() }}, open: false })"
                  x-init="init()" class="relative flex items-center">
 
                 <button @click="toggle()" type="button"
@@ -97,8 +97,7 @@
                     })->where('remitente_id', '!=', Auth::id())->whereNull('leido_at')->count();
                 @endphp
                 <span id="chat-badge"
-                    class="absolute -top-2 -right-4 min-w-[16px] h-4 px-1 rounded-full bg-yellow-500 text-black text-[10px] font-bold leading-4 text-center {{ $noLeidos > 0 ? '' : 'hidden' }}">
-                    {{ $noLeidos > 99 ? '99+' : $noLeidos }}
+                    class="absolute -top-2 -right-2 w-2 h-2 rounded-full bg-yellow-500 {{ $noLeidos > 0 ? '' : 'hidden' }}">
                 </span>
             </a>
             <a href="{{ route('perfil') }}" class="text-[#ddd] no-underline text-[12px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">{{ Auth::user()->name }}</a>

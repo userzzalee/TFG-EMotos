@@ -28,7 +28,7 @@ class NotificacionController extends Controller
 
         $notificaciones = $user->notifications()
             ->latest()
-            ->take(8)
+            ->take(3)
             ->get()
             ->map(fn ($n) => [
                 'id'        => $n->id,

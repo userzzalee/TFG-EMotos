@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil</title>
-    @vite(['resources/css/app.css'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
 
@@ -46,6 +46,10 @@
         </div>
 
         <div class="flex gap-3 justify-center">
+            <a href="{{ route('order.index') }}"
+               class="w-[120px] h-[32px] text-white bg-gray-700 hover:bg-gray-600 font-medium rounded-[20px] cursor-pointer border-none transition-colors text-xs flex items-center justify-center">
+                Mis Pedidos
+            </a>
             @if(Auth::user()->esAdmin())
                 <a href="{{ url('/admin/usuarios') }}"
                    class="w-[120px] h-[32px] text-white bg-gray-700 hover:bg-gray-600 font-medium rounded-[20px] cursor-pointer border-none transition-colors text-xs flex items-center justify-center">

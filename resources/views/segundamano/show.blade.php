@@ -29,9 +29,7 @@
             {{-- Imagen --}}
             <div class="aspect-square bg-gray-900 overflow-hidden rounded">
                 @if($anuncio->imagen)
-                    <img src="{{ asset('storage/' . $anuncio->imagen) }}"
-                         alt=""
-                         class="w-full h-full object-cover">
+                    <img src="{{ asset('storage/' . $anuncio->imagen) }}" alt="" class="w-full h-full object-cover">
                 @else
                     <div class="w-full h-full flex items-center justify-center text-gray-700 text-xs tracking-widest uppercase">
                         Sin imagen
@@ -89,16 +87,16 @@
                         @if(Auth::id() === $anuncio->user_id)
                             {{-- Dueño del anuncio --}}
                             <a href="{{ route('segundamano.editar', $anuncio->id) }}"
-                               class="w-full py-3 border border-yellow-500 text-yellow-500 text-xs tracking-widest uppercase
-                                      text-center hover:bg-yellow-500 hover:text-black transition-all">
+                                class="w-full py-3 border border-yellow-500 text-yellow-500 text-xs tracking-widest uppercase
+                                text-center hover:bg-yellow-500 hover:text-black transition-all">
                                 Editar anuncio
                             </a>
                             <form action="{{ route('segundamano.destroy', $anuncio->id) }}" method="POST"
-                                  onsubmit="return confirm('¿Eliminar este anuncio?')">
+                                    onsubmit="return confirm('¿Eliminar este anuncio?')">
                                 @csrf
                                 <button type="submit"
                                         class="w-full py-3 border border-red-500/30 text-red-400 text-xs tracking-widest uppercase
-                                               hover:bg-red-500/10 transition-all">
+                                            hover:bg-red-500/10 transition-all">
                                     Eliminar anuncio
                                 </button>
                             </form>
@@ -106,8 +104,8 @@
                             {{-- Comprador: contactar con el vendedor --}}
                             @if($conversacionExistente)
                                 <a href="{{ route('chat.show', $conversacionExistente->id) }}"
-                                   class="w-full py-3 border border-yellow-500 text-yellow-500 text-xs tracking-widest uppercase
-                                          text-center hover:bg-yellow-500 hover:text-black transition-all">
+                                class="w-full py-3 border border-yellow-500 text-yellow-500 text-xs tracking-widest uppercase
+                                        text-center hover:bg-yellow-500 hover:text-black transition-all">
                                     Continuar conversación
                                 </a>
                             @else
@@ -115,7 +113,7 @@
                                     @csrf
                                     <button type="submit"
                                             class="w-full py-3 bg-yellow-500 text-black text-xs tracking-widest uppercase
-                                                   font-medium hover:bg-yellow-400 transition-all">
+                                                font-medium hover:bg-yellow-400 transition-all">
                                         Contactar con el vendedor
                                     </button>
                                 </form>
@@ -127,8 +125,8 @@
                         @endif
                     @else
                         <a href="{{ route('login') }}"
-                           class="w-full py-3 border border-yellow-500 text-yellow-500 text-xs tracking-widest uppercase
-                                  text-center hover:bg-yellow-500 hover:text-black transition-all">
+                        class="w-full py-3 border border-yellow-500 text-yellow-500 text-xs tracking-widest uppercase
+                                text-center hover:bg-yellow-500 hover:text-black transition-all">
                             Inicia sesión para contactar
                         </a>
                     @endauth
@@ -156,8 +154,8 @@
                             <div class="aspect-[4/3] bg-gray-900 overflow-hidden mb-2">
                                 @if($otro->imagen)
                                     <img src="{{ asset('storage/' . $otro->imagen) }}"
-                                         alt=""
-                                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                        alt=""
+                                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center text-gray-700 text-[10px] uppercase tracking-widest">Sin imagen</div>
                                 @endif

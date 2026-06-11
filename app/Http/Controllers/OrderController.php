@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,15 +25,9 @@ class OrderController extends Controller
         return view('checkout', compact('cart', 'total'));
     }
     
-    public function store(Request $request)
+    public function store(StoreOrderRequest $request)
     {
-        $request->validate([
-            'shipping_address' => 'required|string',
-            'shipping_city' => 'required|string',
-            'shipping_postal_code' => 'required|string',
-            'shipping_phone' => 'required|string',
-            'payment_method' => 'required|string|in:card,cash',
-        ]);
+        $request->validated();
         
         $cart = Session::get('cart', []);
         

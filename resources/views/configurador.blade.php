@@ -127,7 +127,7 @@
                     <input type="hidden" name="color" id="config-color" value="gris">
                     <input type="hidden" name="motor" id="config-motor" value="40">
                     <input type="hidden" name="precio" id="config-precio" value="4999">
-                    <button type="submit" class="w-full bg-yellow-500 text-black rounded-lg py-3 font-medium hover:bg-yellow-400 transition-all text-sm">Añadir al carrito</button>
+                    <button type="submit" class="w-full bg-yellow-500 text-black rounded-lg py-3 font-medium hover:bg-yellow-400 transition-all text-sm" onclick="this.disabled=true;this.form.submit();">Añadir al carrito</button>
                 </form>
             </div>
         </div>

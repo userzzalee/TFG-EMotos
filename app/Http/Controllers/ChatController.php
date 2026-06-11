@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\MensajeEnviado;
+use App\Http\Requests\SendMessageRequest;
 use App\Models\Conversacion;
 use App\Models\Mensaje;
 use App\Models\Producto;
@@ -58,10 +59,7 @@ class ChatController extends Controller
         $userId = Auth::id();
 
         // Solo los participantes pueden ver la conversación
-        abort_unless(
-            $conversacion->comprador_id === $userId || $conversacion->vendedor_id === $userId,
-            403
-        );
+        $this->authorize('participar', $conversacion);
 
         // Marcar como leídos los mensajes del otro
         $conversacion->mensajes()
@@ -72,27 +70,26 @@ class ChatController extends Controller
         // Y también las notificaciones in-app de esos mensajes (campana del navbar).
         $this->marcarNotificacionesMensajeLeidas(Auth::user(), $conversacion->id);
 
-        // Traemos la última página (los 50 más recientes). En la vista se
-        // muestran en orden cronológico (el más nuevo abajo), como un chat.
-        $mensajes = $conversacion->mensajes()->with('remitente')->latest()->paginate(50);
+        // Traemos los mensajes en orden cronológico (más antiguo primero, más nuevo abajo).
+        // Si no se pide una página específica, vamos a la última para ver los más recientes.
+        $query = $conversacion->mensajes()->with('remitente')->oldest();
+        $mensajes = $query->paginate(50);
+        if (!request()->has('page') && $mensajes->lastPage() > 1) {
+            $mensajes = $query->paginate(50, ['*'], 'page', $mensajes->lastPage());
+        }
         $otro     = $conversacion->otroParticipante($userId);
 
         return view('chat.show', compact('conversacion', 'mensajes', 'otro', 'userId'));
     }
 
     // Enviar un mensaje
-    public function enviar(Request $request, Conversacion $conversacion): JsonResponse|RedirectResponse
+    public function enviar(SendMessageRequest $request, Conversacion $conversacion): JsonResponse|RedirectResponse
     {
         $userId = Auth::id();
 
-        abort_unless(
-            $conversacion->comprador_id === $userId || $conversacion->vendedor_id === $userId,
-            403
-        );
+        $this->authorize('participar', $conversacion);
 
-        $request->validate([
-            'contenido' => 'required|string|max:2000',
-        ]);
+        $request->validated();
 
         $mensaje = Mensaje::create([
             'conversacion_id' => $conversacion->id,
@@ -138,10 +135,7 @@ class ChatController extends Controller
     {
         $userId = Auth::id();
 
-        abort_unless(
-            $conversacion->comprador_id === $userId || $conversacion->vendedor_id === $userId,
-            403
-        );
+        $this->authorize('participar', $conversacion);
 
         $conversacion->mensajes()
             ->where('remitente_id', '!=', $userId)

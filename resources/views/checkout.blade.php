@@ -48,19 +48,19 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div class="col-span-2">
                         <label class="block text-xs tracking-widest text-gray-400 mb-2 uppercase">Dirección</label>
-                        <input type="text" name="shipping_address" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white text-sm focus:border-yellow-500 focus:outline-none transition-all" placeholder="Calle, número, piso...">
+                        <input type="text" name="shipping_address" required minlength="10" maxlength="255" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white text-sm focus:border-yellow-500 focus:outline-none transition-all" placeholder="Calle, número, piso...">
                     </div>
                     <div>
                         <label class="block text-xs tracking-widest text-gray-400 mb-2 uppercase">Ciudad</label>
-                        <input type="text" name="shipping_city" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white text-sm focus:border-yellow-500 focus:outline-none transition-all" placeholder="Ciudad">
+                        <input type="text" name="shipping_city" required minlength="2" maxlength="100" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white text-sm focus:border-yellow-500 focus:outline-none transition-all" placeholder="Ciudad">
                     </div>
                     <div>
                         <label class="block text-xs tracking-widest text-gray-400 mb-2 uppercase">Código Postal</label>
-                        <input type="text" name="shipping_postal_code" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white text-sm focus:border-yellow-500 focus:outline-none transition-all" placeholder="28001">
+                        <input type="text" name="shipping_postal_code" required pattern="[0-9]{5}" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white text-sm focus:border-yellow-500 focus:outline-none transition-all" placeholder="28001">
                     </div>
                     <div class="col-span-2">
                         <label class="block text-xs tracking-widest text-gray-400 mb-2 uppercase">Teléfono</label>
-                        <input type="tel" name="shipping_phone" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white text-sm focus:border-yellow-500 focus:outline-none transition-all" placeholder="+34 600 000 000">
+                        <input type="tel" name="shipping_phone" required pattern="(\+34|0034)?[6-9][0-9]{8}" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white text-sm focus:border-yellow-500 focus:outline-none transition-all" placeholder="+34 600 000 000">
                     </div>
                 </div>
             </div>

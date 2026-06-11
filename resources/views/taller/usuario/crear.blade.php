@@ -63,10 +63,12 @@
                     <div class="mt-4">
                         <p class="text-[11px] text-white/30 uppercase tracking-wider mb-2">2 · Elige una hora</p>
                         <div class="grid grid-cols-4 sm:grid-cols-6 gap-2">
-                            <template x-for="h in slots" :key="h">
-                                <button type="button" @click="elegirHora(h)"
-                                        class="slot-chip" :class="horaActiva === h ? 'slot-chip-activo' : ''"
-                                        x-text="h"></button>
+                            <template x-for="h in slots" :key="h.hora">
+                                <button type="button" @click="!h.ocupado && elegirHora(h.hora)"
+                                        :disabled="h.ocupado"
+                                        class="slot-chip"
+                                        :class="h.ocupado ? 'slot-chip-ocupado' : (horaActiva === h.hora ? 'slot-chip-activo' : '')"
+                                        x-text="h.hora"></button>
                             </template>
                         </div>
                     </div>
@@ -137,7 +139,8 @@
 
     .slot-chip { padding:8px 0; border-radius:8px; font-size:13px; color:#cbd5e1; background:#111;
                  border:1px solid rgba(255,255,255,.12); cursor:pointer; transition:all .15s; }
-    .slot-chip:hover { border-color:rgba(240,195,109,.4); color:#fff; }
+    .slot-chip:hover:not(:disabled) { border-color:rgba(240,195,109,.4); color:#fff; }
     .slot-chip-activo { background:#f0c36d; border-color:#f0c36d; color:#000; font-weight:700; }
+    .slot-chip-ocupado { opacity:0.35; cursor:not-allowed; text-decoration:line-through; }
 </style>
 @endsection

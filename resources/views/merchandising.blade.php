@@ -73,7 +73,7 @@
                                     @csrf
                                     <input type="hidden" name="producto_id" value="{{ $producto->id }}">
                                     <input type="hidden" name="cantidad" value="1">
-                                    <button type="submit" class="w-full bg-white text-black py-2 text-xs tracking-widest font-medium hover:bg-yellow-500 transition-all">
+                                    <button type="submit" class="w-full bg-white text-black py-2 text-xs tracking-widest font-medium hover:bg-yellow-500 transition-all" onclick="this.disabled=true;this.form.submit();">
                                         AÑADIR
                                     </button>
                                 </form>

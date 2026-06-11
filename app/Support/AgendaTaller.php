@@ -28,8 +28,10 @@ class AgendaTaller
         $hasta = $ahora->copy()->addDays($diasVista)->endOfDay();
 
         // Ocupación actual: mapa 'Y-m-d H:i' => nº de citas en ese hueco.
+        // Solo cuentan las citas activas (no pagadas ni canceladas).
         $ocupacion = CitaTaller::whereNotNull('fecha_cita')
             ->whereBetween('fecha_cita', [$ahora->copy()->startOfDay(), $hasta])
+            ->whereIn('estado', ['pendiente', 'aceptada', 'en_proceso', 'finalizada'])
             ->get(['fecha_cita'])
             ->groupBy(fn ($c) => $c->fecha_cita->format('Y-m-d H:i'))
             ->map->count();
@@ -50,9 +52,10 @@ class AgendaTaller
                 }
 
                 $ocupados = $ocupacion[$slot->format('Y-m-d H:i')] ?? 0;
-                if ($ocupados < $capacidad) {
-                    $slots[] = $slot->format('H:i');
-                }
+                $slots[] = [
+                    'hora'    => $slot->format('H:i'),
+                    'ocupado' => $ocupados >= $capacidad,
+                ];
             }
 
             if (! empty($slots)) {
@@ -113,10 +116,11 @@ class AgendaTaller
             return false;
         }
 
-        // Capacidad del hueco.
+        // Capacidad del hueco (solo citas activas ocupan plaza).
         $capacidad = (int) config('taller.capacidad_slot', 1);
         $ocupados = CitaTaller::whereNotNull('fecha_cita')
             ->where('fecha_cita', $fechaHora->format('Y-m-d H:i:00'))
+            ->whereIn('estado', ['pendiente', 'aceptada', 'en_proceso', 'finalizada'])
             ->count();
 
         return $ocupados < $capacidad;

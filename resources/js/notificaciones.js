@@ -9,7 +9,7 @@
  * Se registra en window para que Alpine lo encuentre en x-data="notificaciones()".
  */
 window.notificaciones = (config = {}) => ({
-    open: false,
+    open: config.open ?? false,
     cargando: false,
     items: [],
     noLeidas: config.noLeidas ?? 0,

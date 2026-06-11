@@ -27,8 +27,7 @@
             </div>
         @endif
 
-        {{-- $mensajes viene del más nuevo al más viejo; lo invertimos para mostrar el más nuevo abajo --}}
-        @forelse($mensajes->reverse() as $msg)
+        @forelse($mensajes as $msg)
             @php $esMio = $msg->remitente_id === $userId; @endphp
             <div class="flex {{ $esMio ? 'justify-end' : 'justify-start' }}" data-msg-id="{{ $msg->id }}">
                 <div class="max-w-[70%] px-3 py-2 rounded-[10px] text-xs leading-relaxed {{ $esMio ? 'bg-[#f0c36d]/15 border border-[#f0c36d]/25 text-[#f0c36d]' : 'bg-white/5 border border-white/10 text-gray-300' }}">
@@ -54,5 +53,12 @@
     </form>
 
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const chatBox = document.getElementById('chat-box');
+        if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
+    });
+</script>
 
 @endsection
