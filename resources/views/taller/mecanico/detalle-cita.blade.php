@@ -37,6 +37,17 @@
         <p class="text-xs text-white/40">{{ $cita->matricula }}</p>
     </div>
 
+    {{-- Fecha de la cita --}}
+    <div class="info-card">
+        <p class="info-label">Fecha de la cita</p>
+        @if($cita->fecha_cita)
+            <p class="info-value text-[#f0c36d]">{{ ucfirst($cita->fecha_cita->locale('es')->isoFormat('ddd D MMM')) }}</p>
+            <p class="text-xs text-white/40">{{ $cita->fecha_cita->format('H:i') }} h</p>
+        @else
+            <p class="info-value text-white/40">Sin fecha</p>
+        @endif
+    </div>
+
     {{-- Fecha --}}
     <div class="info-card">
         <p class="info-label">Solicitud</p>

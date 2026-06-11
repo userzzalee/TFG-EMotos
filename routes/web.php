@@ -5,6 +5,7 @@ use App\Http\Controllers\MerchandisingController;
 use App\Http\Controllers\TallerController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\SegundaManoController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
@@ -58,10 +59,20 @@ Route::prefix('segunda-mano')->name('segundamano.')->group(function () {
 });
 // Chat
 Route::middleware('auth')->prefix('chat')->name('chat.')->group(function () {
-    Route::get('/',                         [ChatController::class, 'index'])  ->name('index');
-    Route::post('/iniciar/{producto}',      [ChatController::class, 'iniciar'])->name('iniciar');
-    Route::get('/{conversacion}',           [ChatController::class, 'show'])   ->name('show');
-    Route::post('/{conversacion}/mensajes', [ChatController::class, 'enviar']) ->name('enviar');
+    Route::get('/',                         [ChatController::class, 'index'])           ->name('index');
+    Route::get('/no-leidos/contador',       [ChatController::class, 'contadorNoLeidos'])->name('contador');
+    Route::post('/iniciar/{producto}',      [ChatController::class, 'iniciar'])         ->name('iniciar');
+    Route::get('/{conversacion}',           [ChatController::class, 'show'])            ->name('show');
+    Route::post('/{conversacion}/mensajes', [ChatController::class, 'enviar'])          ->name('enviar');
+    Route::post('/{conversacion}/leer',     [ChatController::class, 'leer'])            ->name('leer');
+});
+
+// Notificaciones
+Route::middleware('auth')->prefix('notificaciones')->name('notificaciones.')->group(function () {
+    Route::get('/',              [NotificacionController::class, 'index'])     ->name('index');
+    Route::get('/recientes',     [NotificacionController::class, 'recientes']) ->name('recientes');
+    Route::post('/leer-todas',   [NotificacionController::class, 'leerTodas']) ->name('leer-todas');
+    Route::get('/{id}',          [NotificacionController::class, 'abrir'])     ->name('abrir');
 });
 
 // Perfil

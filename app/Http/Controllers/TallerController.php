@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CitaTaller;
+use App\Notifications\CitaEstadoActualizado;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -97,6 +98,8 @@ class TallerController extends Controller
             'mecanico_id' => Auth::id(),
         ]);
 
+        $cita->usuario->notify(new CitaEstadoActualizado($cita));
+
         return redirect()->route('taller.nuevas-citas')
                          ->with('success', 'Cita aceptada.');
     }
@@ -133,6 +136,8 @@ class TallerController extends Controller
             'estado'              => 'en_proceso',
         ]);
 
+        $cita->usuario->notify(new CitaEstadoActualizado($cita));
+
         return redirect()->route('taller.detalle-cita', $cita)
                          ->with('success', 'Comentario guardado.');
     }
@@ -152,6 +157,8 @@ class TallerController extends Controller
             'comentario_mecanico' => $data['comentario_mecanico'] ?? $cita->comentario_mecanico,
             'estado'              => 'finalizada',
         ]);
+
+        $cita->usuario->notify(new CitaEstadoActualizado($cita));
 
         return redirect()->route('taller.trabajo-pendiente')
                          ->with('success', 'Cita finalizada. El cliente podrá realizar el pago.');

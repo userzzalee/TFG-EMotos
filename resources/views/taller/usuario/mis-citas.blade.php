@@ -17,6 +17,12 @@
                         <span class="text-white/40 font-normal text-sm ml-2">{{ $cita->matricula }}</span>
                     </p>
                     <p class="text-sm text-white/50 mt-1">{{ Str::limit($cita->problema, 120) }}</p>
+                    @if($cita->fecha_cita)
+                        <p class="inline-flex items-center gap-1.5 text-xs text-[#f0c36d] mt-2 border border-[#f0c36d]/25 bg-[#f0c36d]/5 rounded px-2 py-1">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            {{ $cita->fechaCitaLegible() }}
+                        </p>
+                    @endif
                 </div>
                 <span class="shrink-0 text-xs border rounded px-2 py-1 {{ $cita->colorEstado() }}">
                     {{ $cita->etiquetaEstado() }}
@@ -44,6 +50,9 @@
                         <p class="text-sm text-white/50 mt-1">
                             <span class="text-white/30">Mecánico:</span> {{ $cita->comentario_mecanico }}
                         </p>
+                    @endif
+                    @if($cita->fecha_cita)
+                        <p class="text-xs text-white/40 mt-2">Cita: {{ $cita->fechaCitaLegible() }}</p>
                     @endif
                 </div>
                 <div class="text-right shrink-0">

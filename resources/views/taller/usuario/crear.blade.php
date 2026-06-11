@@ -34,6 +34,54 @@
             @error('matricula') <p class="field-error">{{ $message }}</p> @enderror
         </div>
 
+        {{-- Fecha y hora de la cita --}}
+        <div x-data="agendaPicker(@js($agenda), '{{ old('fecha_cita') }}')">
+            <label class="field-label">Fecha y hora de la cita *</label>
+
+            {{-- input oculto que se envía con el formulario --}}
+            <input type="hidden" name="fecha_cita" :value="seleccion">
+
+            <template x-if="dias.length === 0">
+                <p class="text-sm text-white/40 bg-[#111] border border-white/10 rounded-lg px-4 py-3">
+                    No hay horas disponibles en los próximos días. Vuelve a intentarlo más tarde.
+                </p>
+            </template>
+
+            <div x-show="dias.length > 0" x-cloak>
+                {{-- Días --}}
+                <p class="text-[11px] text-white/30 uppercase tracking-wider mb-2">1 · Elige un día</p>
+                <div class="flex gap-2 overflow-x-auto pb-2">
+                    <template x-for="d in dias" :key="d.fecha">
+                        <button type="button" @click="elegirDia(d)"
+                                class="day-chip" :class="diaActivo === d.fecha ? 'day-chip-activo' : ''"
+                                x-text="d.etiqueta"></button>
+                    </template>
+                </div>
+
+                {{-- Horas --}}
+                <template x-if="diaActivo">
+                    <div class="mt-4">
+                        <p class="text-[11px] text-white/30 uppercase tracking-wider mb-2">2 · Elige una hora</p>
+                        <div class="grid grid-cols-4 sm:grid-cols-6 gap-2">
+                            <template x-for="h in slots" :key="h">
+                                <button type="button" @click="elegirHora(h)"
+                                        class="slot-chip" :class="horaActiva === h ? 'slot-chip-activo' : ''"
+                                        x-text="h"></button>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+
+                {{-- Resumen --}}
+                <p class="text-sm mt-4" x-show="resumen" x-cloak>
+                    <span class="text-white/40">Cita seleccionada:</span>
+                    <span class="text-[#f0c36d] font-semibold" x-text="resumen"></span>
+                </p>
+            </div>
+
+            @error('fecha_cita') <p class="field-error">{{ $message }}</p> @enderror
+        </div>
+
         {{-- Problema --}}
         <div>
             <label class="field-label">Descripción del problema *</label>
@@ -80,5 +128,16 @@
                    padding:10px 14px; color:#e5e7eb; font-size:14px; outline:none; transition:border .15s; }
     .field-input:focus { border-color:#f0c36d; }
     .field-error { margin-top:4px; font-size:12px; color:#f87171; }
+
+    .day-chip { flex:0 0 auto; white-space:nowrap; padding:8px 14px; border-radius:8px;
+                font-size:12px; color:#cbd5e1; background:#111; border:1px solid rgba(255,255,255,.12);
+                cursor:pointer; transition:all .15s; }
+    .day-chip:hover { border-color:rgba(240,195,109,.4); color:#fff; }
+    .day-chip-activo { background:rgba(240,195,109,.15); border-color:#f0c36d; color:#f0c36d; font-weight:600; }
+
+    .slot-chip { padding:8px 0; border-radius:8px; font-size:13px; color:#cbd5e1; background:#111;
+                 border:1px solid rgba(255,255,255,.12); cursor:pointer; transition:all .15s; }
+    .slot-chip:hover { border-color:rgba(240,195,109,.4); color:#fff; }
+    .slot-chip-activo { background:#f0c36d; border-color:#f0c36d; color:#000; font-weight:700; }
 </style>
 @endsection

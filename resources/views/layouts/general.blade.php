@@ -3,7 +3,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    @auth
+        <meta name="user-id" content="{{ Auth::id() }}">
+    @endauth
     <title>Alyx</title>
+    <style>[x-cloak]{display:none!important;}</style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen" style="background-color:#0a0a0a; color:#e5e7eb;">
@@ -23,5 +28,6 @@
         @yield('content')
     </main>
 </div>
+@stack('scripts')
 </body>
 </html>

@@ -22,6 +22,9 @@
                 <div>
                     <p class="text-white font-semibold text-sm">{{ $cita->marca }} {{ $cita->modelo }}</p>
                     <p class="text-white/40 text-xs">{{ $cita->matricula }} · {{ $cita->usuario->name }} · {{ $cita->created_at->diffForHumans() }}</p>
+                    @if($cita->fecha_cita)
+                        <p class="text-[#f0c36d] text-xs mt-0.5">📅 {{ $cita->fechaCitaLegible() }}</p>
+                    @endif
                 </div>
             </div>
             <svg class="w-4 h-4 text-white/40 transition-transform" :class="open ? 'rotate-180' : ''"
@@ -42,6 +45,12 @@
                     <p class="detail-label">Vehículo</p>
                     <p class="detail-value">{{ $cita->marca }} {{ $cita->modelo }} — {{ $cita->matricula }}</p>
                 </div>
+                @if($cita->fecha_cita)
+                    <div>
+                        <p class="detail-label">Fecha solicitada</p>
+                        <p class="detail-value text-[#f0c36d]">{{ $cita->fechaCitaLegible() }}</p>
+                    </div>
+                @endif
                 <div class="col-span-2">
                     <p class="detail-label">Problema</p>
                     <p class="detail-value text-white/80">{{ $cita->problema }}</p>

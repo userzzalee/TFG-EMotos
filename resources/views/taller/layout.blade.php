@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Taller – Alyx</title>
+    <style>[x-cloak]{display:none!important;}</style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen" style="background-color:#0a0a0a; color:#e5e7eb;">

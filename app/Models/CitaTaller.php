@@ -17,6 +17,7 @@ class CitaTaller extends Model
         'marca',
         'modelo',
         'matricula',
+        'fecha_cita',
         'problema',
         'comentarios',
         'fotos',
@@ -29,8 +30,9 @@ class CitaTaller extends Model
     protected function casts(): array
     {
         return [
-            'fotos'  => 'array',
-            'coste'  => 'decimal:2',
+            'fotos'      => 'array',
+            'coste'      => 'decimal:2',
+            'fecha_cita' => 'datetime',
         ];
     }
 
@@ -50,6 +52,19 @@ class CitaTaller extends Model
     public function esEnProceso(): bool    { return $this->estado === 'en_proceso'; }
     public function esFinalizada(): bool   { return $this->estado === 'finalizada'; }
     public function esPagada(): bool       { return $this->estado === 'pagada'; }
+
+    /**
+     * Fecha de la cita en formato legible, p. ej. "Lun 12 jun · 09:00".
+     * Devuelve null si la cita no tiene fecha asignada (citas antiguas).
+     */
+    public function fechaCitaLegible(): ?string
+    {
+        if (! $this->fecha_cita) {
+            return null;
+        }
+
+        return ucfirst($this->fecha_cita->locale('es')->isoFormat('ddd D MMM')) . ' · ' . $this->fecha_cita->format('H:i');
+    }
 
     public function etiquetaEstado(): string
     {

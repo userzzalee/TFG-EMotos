@@ -24,6 +24,9 @@
                     <span class="text-white/40 font-normal ml-1">{{ $cita->matricula }}</span>
                 </p>
                 <p class="text-[10px] text-white/40 mt-0.5">{{ $cita->usuario->name }} · Aceptada {{ $cita->updated_at->diffForHumans() }}</p>
+                @if($cita->fecha_cita)
+                    <p class="text-[10px] text-[#f0c36d] mt-0.5">📅 {{ $cita->fechaCitaLegible() }}</p>
+                @endif
             </div>
         </div>
 
