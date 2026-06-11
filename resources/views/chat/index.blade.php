@@ -33,9 +33,9 @@
                     <div class="min-w-0">
                         <p class="text-xs font-bold uppercase tracking-widest text-gray-200 truncate">
                             {{ $otro->name }}
-                            @if($conv->producto)
+                            @if($conv->tituloArticulo())
                                 <span class="text-white/30 font-normal normal-case tracking-normal">
-                                    — {{ $conv->producto->titulo }}
+                                    — {{ $conv->tituloArticulo() }}
                                 </span>
                             @endif
                         </p>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Anuncio;
 use App\Models\Conversacion;
+use App\Http\Requests\StoreAnuncioRequest;
+use App\Http\Requests\UpdateAnuncioRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -46,7 +48,7 @@ class SegundaManoController extends Controller
         if (Auth::check() && Auth::id() !== $anuncio->user_id) {
             $conversacionExistente = Conversacion::where('comprador_id', Auth::id())
                 ->where('vendedor_id', $anuncio->user_id)
-                ->whereNull('producto_id')
+                ->where('anuncio_id', $anuncio->id)
                 ->first();
         }
 
@@ -62,16 +64,9 @@ class SegundaManoController extends Controller
         return view('segundamano.crear', compact('categorias', 'estados'));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreAnuncioRequest $request): RedirectResponse
     {
-        $data = $request->validate([
-            'titulo'      => 'required|string|max:255',
-            'descripcion' => 'nullable|string|max:2000',
-            'precio'      => 'required|numeric|min:0',
-            'categoria'   => 'nullable|string|max:100',
-            'estado'      => 'required|in:nuevo,bueno,usado,para-piezas',
-            'imagen'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:3072',
-        ]);
+        $data = $request->validated();
 
         if ($request->hasFile('imagen')) {
             $data['imagen'] = $request->file('imagen')->store('anuncios', 'public');
@@ -89,25 +84,15 @@ class SegundaManoController extends Controller
     // Editar anuncio
     public function edit(Anuncio $anuncio): View
     {
-        abort_unless(Auth::id() === $anuncio->user_id, 403);
+        $this->authorize('update', $anuncio);
         $categorias = Anuncio::categorias();
         $estados    = Anuncio::estados();
         return view('segundamano.editar', compact('anuncio', 'categorias', 'estados'));
     }
 
-    public function update(Request $request, Anuncio $anuncio): RedirectResponse
+    public function update(UpdateAnuncioRequest $request, Anuncio $anuncio): RedirectResponse
     {
-        abort_unless(Auth::id() === $anuncio->user_id, 403);
-
-        $data = $request->validate([
-            'titulo'      => 'required|string|max:255',
-            'descripcion' => 'nullable|string|max:2000',
-            'precio'      => 'required|numeric|min:0',
-            'categoria'   => 'nullable|string|max:100',
-            'estado'      => 'required|in:nuevo,bueno,usado,para-piezas',
-            'vendido'     => 'boolean',
-            'imagen'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:3072',
-        ]);
+        $data = $request->validated();
 
         if ($request->hasFile('imagen')) {
             if ($anuncio->imagen) Storage::disk('public')->delete($anuncio->imagen);
@@ -127,7 +112,7 @@ class SegundaManoController extends Controller
 
     public function destroy(Anuncio $anuncio): RedirectResponse
     {
-        abort_unless(Auth::id() === $anuncio->user_id, 403);
+        $this->authorize('delete', $anuncio);
 
         if ($anuncio->imagen) Storage::disk('public')->delete($anuncio->imagen);
         $anuncio->delete();
@@ -160,7 +145,7 @@ class SegundaManoController extends Controller
             [
                 'comprador_id' => $compradorId,
                 'vendedor_id'  => $vendedorId,
-                'producto_id'  => null,
+                'anuncio_id'   => $anuncio->id,
             ],
             ['ultimo_mensaje_at' => now()]
         );

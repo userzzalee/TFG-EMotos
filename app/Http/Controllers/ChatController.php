@@ -21,7 +21,7 @@ class ChatController extends Controller
     {
         $userId = Auth::id();
 
-        $conversaciones = Conversacion::with(['comprador:id,name', 'vendedor:id,name', 'producto:id,nombre,imagen', 'ultimoMensaje'])
+        $conversaciones = Conversacion::with(['comprador:id,name', 'vendedor:id,name', 'producto:id,nombre,imagen', 'anuncio:id,titulo,imagen', 'ultimoMensaje'])
             ->where('comprador_id', $userId)
             ->orWhere('vendedor_id', $userId)
             ->orderByDesc('ultimo_mensaje_at')

@@ -14,6 +14,7 @@ class Conversacion extends Model
         'comprador_id',
         'vendedor_id',
         'producto_id',
+        'anuncio_id',
         'ultimo_mensaje_at',
     ];
 
@@ -35,6 +36,28 @@ class Conversacion extends Model
     public function producto(): BelongsTo
     {
         return $this->belongsTo(Producto::class, 'producto_id');
+    }
+
+    public function anuncio(): BelongsTo
+    {
+        return $this->belongsTo(Anuncio::class, 'anuncio_id');
+    }
+
+    /**
+     * Título del artículo del que trata la conversación, sea un anuncio de
+     * segunda mano o un producto del merchandising.
+     */
+    public function tituloArticulo(): ?string
+    {
+        if ($this->anuncio_id) {
+            return $this->anuncio?->titulo;
+        }
+
+        if ($this->producto_id) {
+            return $this->producto?->nombre;
+        }
+
+        return null;
     }
 
     public function mensajes(): HasMany

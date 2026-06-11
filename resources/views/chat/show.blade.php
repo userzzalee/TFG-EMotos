@@ -9,8 +9,8 @@
     <div class="w-8 h-8 rounded-full bg-[#f0c36d]/10 border border-[#f0c36d]/20 flex items-center justify-center text-[#f0c36d] text-xs font-bold uppercase">{{ mb_substr($otro->name, 0, 1) }}</div>
     <div>
         <p class="text-sm font-bold uppercase tracking-widest text-white leading-none">{{ $otro->name }}</p>
-        @if($conversacion->producto)
-            <p class="text-[10px] text-white/30 mt-0.5 uppercase tracking-wider">Sobre: {{ $conversacion->producto->titulo }}</p>
+        @if($conversacion->tituloArticulo())
+            <p class="text-[10px] text-white/30 mt-0.5 uppercase tracking-wider">Sobre: {{ $conversacion->tituloArticulo() }}</p>
         @endif
     </div>
 </div>

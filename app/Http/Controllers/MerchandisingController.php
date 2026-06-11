@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductoRequest;
+use App\Http\Requests\UpdateProductoRequest;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 
@@ -9,14 +11,14 @@ class MerchandisingController extends Controller
 {
     public function index(Request $request)
     {
-        $busqueda = $request->input('buscar');
+        $busqueda  = $request->input('buscar');
         $precioMin = $request->input('precio_min');
         $precioMax = $request->input('precio_max');
 
         $query = Producto::where('activo', true);
 
         if ($busqueda) {
-            $query->where(function($q) use ($busqueda) {
+            $query->where(function ($q) use ($busqueda) {
                 $q->where('nombre', 'like', "%{$busqueda}%")
                   ->orWhere('descripcion', 'like', "%{$busqueda}%");
             });
@@ -40,28 +42,14 @@ class MerchandisingController extends Controller
         return view('admin.crear-producto');
     }
 
-    public function store(Request $request)
+    public function store(StoreProductoRequest $request)
     {
-        $request->validate([
-            'nombre' => 'required|string|max:255',
-            'descripcion' => 'nullable|string',
-            'precio' => 'required|numeric|min:0',
-            'imagen' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'stock' => 'required|integer|min:0',
-            'categoria' => 'nullable|string|max:100',
-        ]);
+        $data = $request->validated();
 
-        $imagenPath = $request->file('imagen')->store('productos', 'public');
+        $data['imagen'] = $request->file('imagen')->store('productos', 'public');
+        $data['activo'] = true;
 
-        Producto::create([
-            'nombre' => $request->nombre,
-            'descripcion' => $request->descripcion,
-            'precio' => $request->precio,
-            'imagen' => $imagenPath,
-            'stock' => $request->stock,
-            'categoria' => $request->categoria,
-            'activo' => true,
-        ]);
+        Producto::create($data);
 
         return redirect()->route('merchandising')->with('success', 'Producto creado exitosamente');
     }
@@ -72,30 +60,19 @@ class MerchandisingController extends Controller
         return view('admin.editar-producto', compact('producto'));
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateProductoRequest $request, $id)
     {
-        $request->validate([
-            'nombre' => 'required|string|max:255',
-            'descripcion' => 'nullable|string',
-            'precio' => 'required|numeric|min:0',
-            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'stock' => 'required|integer|min:0',
-            'categoria' => 'nullable|string|max:100',
-        ]);
-
         $producto = Producto::findOrFail($id);
 
+        $data = $request->validated();
+
         if ($request->hasFile('imagen')) {
-            $imagenPath = $request->file('imagen')->store('productos', 'public');
-            $producto->imagen = $imagenPath;
+            $data['imagen'] = $request->file('imagen')->store('productos', 'public');
+        } else {
+            unset($data['imagen']);
         }
 
-        $producto->nombre = $request->nombre;
-        $producto->descripcion = $request->descripcion;
-        $producto->precio = $request->precio;
-        $producto->stock = $request->stock;
-        $producto->categoria = $request->categoria;
-        $producto->save();
+        $producto->update($data);
 
         return redirect()->route('merchandising')->with('success', 'Producto actualizado exitosamente');
     }

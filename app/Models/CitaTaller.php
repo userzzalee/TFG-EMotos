@@ -24,6 +24,7 @@ class CitaTaller extends Model
         'estado',
         'comentario_mecanico',
         'coste',
+        'stripe_session_id',
         'mecanico_id',
     ];
 

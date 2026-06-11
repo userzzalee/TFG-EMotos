@@ -15,10 +15,14 @@ Route::get('/', function () {
 });
 
 Route::get('/merchandising', [MerchandisingController::class, 'index'])->name('merchandising');
-Route::get('/admin/productos/crear', [MerchandisingController::class, 'create'])->name('merchandising.create');
-Route::post('/admin/productos', [MerchandisingController::class, 'store'])->name('merchandising.store');
-Route::get('/admin/productos/{id}/editar', [MerchandisingController::class, 'edit'])->name('merchandising.edit');
-Route::post('/admin/productos/{id}', [MerchandisingController::class, 'update'])->name('merchandising.update');
+
+// Gestión de productos: solo administradores autenticados.
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/productos/crear', [MerchandisingController::class, 'create'])->name('merchandising.create');
+    Route::post('/admin/productos', [MerchandisingController::class, 'store'])->name('merchandising.store');
+    Route::get('/admin/productos/{id}/editar', [MerchandisingController::class, 'edit'])->name('merchandising.edit');
+    Route::post('/admin/productos/{id}', [MerchandisingController::class, 'update'])->name('merchandising.update');
+});
 
 // Carrito
 Route::prefix('carrito')->name('cart.')->group(function () {
@@ -98,6 +102,8 @@ Route::middleware('auth')->prefix('taller')->name('taller.')->group(function () 
     Route::post('/nueva',        [TallerController::class, 'guardar']) ->name('guardar');
     Route::get('/mis-citas',     [TallerController::class, 'misCitas'])->name('mis-citas');
     Route::post('/{cita}/pagar', [TallerController::class, 'pagar'])   ->name('pagar');
+    Route::get('/{cita}/pago/exito',     [TallerController::class, 'pagoExito'])    ->name('pago.exito');
+    Route::get('/{cita}/pago/cancelado', [TallerController::class, 'pagoCancelado'])->name('pago.cancelado');
 });
 
 // Taller Mecánico
@@ -112,7 +118,7 @@ Route::middleware('auth')->prefix('taller/mecanico')->name('taller.')->group(fun
 });
 
 // Panel Admin
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/usuarios', [AdminController::class, 'index'])->name('usuarios');
     Route::patch('/usuarios/{usuario}/rol', [AdminController::class, 'actualizarRol'])->name('usuarios.rol');
     Route::delete('/usuarios/{usuario}', [AdminController::class, 'eliminar'])->name('usuarios.eliminar');
