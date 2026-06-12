@@ -11,44 +11,60 @@
 
 @include('layouts.navigation')
 
-<div class="pt-[75px] min-h-screen flex">
+<div class="pt-[60px] min-h-screen flex flex-col md:flex-row">
 
-    {{-- Sidebar --}}
-    <aside class="w-48 shrink-0 border-r border-white/10 px-4 pt-4 pb-2 flex flex-col justify-start gap-3">
+    {{-- Toggle sidebar móvil --}}
+    <div x-data="{ sideOpen: false }" class="md:hidden">
+        <button @click="sideOpen = !sideOpen"
+                class="flex items-center gap-2 w-full px-4 py-3 border-b border-white/10 text-[11px] uppercase tracking-widest text-white/50 hover:text-[#f0c36d] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+            Navegación del taller
+        </button>
 
+        <div x-show="sideOpen" x-cloak
+             class="border-b border-white/10 px-4 py-3 flex flex-col gap-2 bg-[#0a0a0a]">
+            @auth
+                @if(Auth::user()->rol === 'mecanico' || Auth::user()->esAdmin())
+                    <a href="{{ route('taller.nuevas-citas') }}" @click="sideOpen=false"
+                       class="sidebar-link {{ request()->routeIs('taller.nuevas-citas') ? 'active' : '' }}">Nuevas citas</a>
+                    <a href="{{ route('taller.trabajo-pendiente') }}" @click="sideOpen=false"
+                       class="sidebar-link {{ request()->routeIs('taller.trabajo-pendiente') || request()->routeIs('taller.detalle-cita') ? 'active' : '' }}">Trabajo pendiente</a>
+                    <a href="{{ route('taller.historial') }}" @click="sideOpen=false"
+                       class="sidebar-link {{ request()->routeIs('taller.historial') ? 'active' : '' }}">Historial</a>
+                @else
+                    <a href="{{ route('taller.crear') }}" @click="sideOpen=false"
+                       class="sidebar-link {{ request()->routeIs('taller.crear') ? 'active' : '' }}">Hacer cita</a>
+                    <a href="{{ route('taller.mis-citas') }}" @click="sideOpen=false"
+                       class="sidebar-link {{ request()->routeIs('taller.mis-citas') ? 'active' : '' }}">Mis citas</a>
+                @endif
+            @endauth
+        </div>
+    </div>
+
+    {{-- Sidebar escritorio --}}
+    <aside class="hidden md:flex w-48 shrink-0 border-r border-white/10 px-4 pt-4 pb-2 flex-col justify-start gap-3">
         @auth
             @if(Auth::user()->rol === 'mecanico' || Auth::user()->esAdmin())
-                {{-- Mecánico --}}
                 <a href="{{ route('taller.nuevas-citas') }}"
-                   class="sidebar-link {{ request()->routeIs('taller.nuevas-citas') ? 'active' : '' }}">
-                    Nuevas citas
-                </a>
+                   class="sidebar-link {{ request()->routeIs('taller.nuevas-citas') ? 'active' : '' }}">Nuevas citas</a>
                 <a href="{{ route('taller.trabajo-pendiente') }}"
-                   class="sidebar-link {{ request()->routeIs('taller.trabajo-pendiente') || request()->routeIs('taller.detalle-cita') ? 'active' : '' }}">
-                    Trabajo pendiente
-                </a>
+                   class="sidebar-link {{ request()->routeIs('taller.trabajo-pendiente') || request()->routeIs('taller.detalle-cita') ? 'active' : '' }}">Trabajo pendiente</a>
                 <a href="{{ route('taller.historial') }}"
-                   class="sidebar-link {{ request()->routeIs('taller.historial') ? 'active' : '' }}">
-                    Historial
-                </a>
+                   class="sidebar-link {{ request()->routeIs('taller.historial') ? 'active' : '' }}">Historial</a>
             @else
-                {{-- Usuario --}}
                 <a href="{{ route('taller.crear') }}"
-                   class="sidebar-link {{ request()->routeIs('taller.crear') ? 'active' : '' }}">
-                    Hacer cita
-                </a>
+                   class="sidebar-link {{ request()->routeIs('taller.crear') ? 'active' : '' }}">Hacer cita</a>
                 <a href="{{ route('taller.mis-citas') }}"
-                   class="sidebar-link {{ request()->routeIs('taller.mis-citas') ? 'active' : '' }}">
-                    Mis citas
-                </a>
+                   class="sidebar-link {{ request()->routeIs('taller.mis-citas') ? 'active' : '' }}">Mis citas</a>
             @endif
         @endauth
     </aside>
 
     {{-- Contenido --}}
-    <main class="flex-1 px-6 py-8 pt-10 max-w-5xl">
+    <main class="flex-1 px-4 sm:px-6 py-6 sm:py-8 max-w-5xl w-full">
 
-        {{-- Flash messages --}}
         @if(session('success'))
             <div class="mb-4 px-4 py-3 rounded border border-[#f0c36d]/40 bg-[#f0c36d]/10 text-[#f0c36d] text-sm">
                 {{ session('success') }}

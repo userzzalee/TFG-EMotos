@@ -15,50 +15,71 @@
 <main class="relative z-10 text-white pt-[75px] pb-16">
 
     {{-- Cabecera --}}
-    <div class="max-w-5xl mx-auto px-6 mb-8 flex items-end justify-between">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 mb-6 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
         <div>
             <p class="text-[10px] tracking-[0.3em] text-yellow-500 uppercase mb-1">Mercado</p>
-            <h1 class="text-2xl font-light tracking-[0.2em] uppercase">Segunda Mano</h1>
+            <h1 class="text-xl sm:text-2xl font-light tracking-[0.2em] uppercase">Segunda Mano</h1>
         </div>
         @auth
-            <a href="{{ route('segundamano.crear') }}" class="px-5 py-2 border border-yellow-500 text-yellow-500 text-xs tracking-widest hover:bg-yellow-500 hover:text-black transition-all">+ Publicar anuncio</a>
+            <a href="{{ route('segundamano.crear') }}"
+               class="self-start sm:self-auto px-4 sm:px-5 py-2 border border-yellow-500 text-yellow-500 text-xs tracking-widest hover:bg-yellow-500 hover:text-black transition-all">
+               + Publicar anuncio
+            </a>
         @else
-            <a href="{{ route('login') }}" class="px-5 py-2 border border-white/20 text-white/40 text-xs tracking-widest hover:border-yellow-500 hover:text-yellow-500 transition-all">Inicia sesión para vender</a>
+            <a href="{{ route('login') }}"
+               class="self-start sm:self-auto px-4 sm:px-5 py-2 border border-white/20 text-white/40 text-xs tracking-widest hover:border-yellow-500 hover:text-yellow-500 transition-all">
+               Inicia sesión para vender
+            </a>
         @endauth
     </div>
 
     {{-- Buscador + filtros --}}
-    <div class="max-w-5xl mx-auto px-6 mb-8">
-        <form method="GET" action="{{ route('segundamano.index') }}" class="flex flex-wrap gap-3 items-center">
-            <input type="text" name="buscar" value="{{ request('buscar') }}" placeholder="Buscar anuncios…" class="bg-gray-900 border border-gray-700 text-white text-xs px-4 py-2 rounded focus:border-yellow-500 focus:outline-none transition-all w-56 placeholder-gray-600">
-            <select name="categoria" class="bg-gray-900 border border-gray-700 text-white text-xs px-4 py-2 rounded focus:border-yellow-500 focus:outline-none transition-all">
-                <option value="">Todas las categorías</option>
-                @foreach($categorias as $cat)
-                    <option value="{{ $cat }}" {{ request('categoria') === $cat ? 'selected' : '' }}>{{ ucfirst($cat) }}</option>
-                @endforeach
-            </select>
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 mb-8">
+        <form method="GET" action="{{ route('segundamano.index') }}" class="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3 items-stretch sm:items-center">
+            <input type="text" name="buscar" value="{{ request('buscar') }}" placeholder="Buscar anuncios…"
+                   class="bg-gray-900 border border-gray-700 text-white text-xs px-4 py-2 rounded focus:border-yellow-500 focus:outline-none transition-all w-full sm:w-56 placeholder-gray-600">
 
-            {{-- Rango de precio (feature 10) --}}
-            <input type="number" name="precio_min" min="0" step="0.01" value="{{ request('precio_min') }}" placeholder="€ mín" class="bg-gray-900 border border-gray-700 text-white text-xs px-3 py-2 rounded focus:border-yellow-500 focus:outline-none transition-all w-24 placeholder-gray-600">
-            <input type="number" name="precio_max" min="0" step="0.01" value="{{ request('precio_max') }}" placeholder="€ máx" class="bg-gray-900 border border-gray-700 text-white text-xs px-3 py-2 rounded focus:border-yellow-500 focus:outline-none transition-all w-24 placeholder-gray-600">
+            <div class="grid grid-cols-2 sm:flex gap-2">
+                <select name="categoria"
+                        class="bg-gray-900 border border-gray-700 text-white text-xs px-3 py-2 rounded focus:border-yellow-500 focus:outline-none transition-all">
+                    <option value="">Todas las categorías</option>
+                    @foreach($categorias as $cat)
+                        <option value="{{ $cat }}" {{ request('categoria') === $cat ? 'selected' : '' }}>{{ ucfirst($cat) }}</option>
+                    @endforeach
+                </select>
+                <select name="orden"
+                        class="bg-gray-900 border border-gray-700 text-white text-xs px-3 py-2 rounded focus:border-yellow-500 focus:outline-none transition-all">
+                    @foreach($ordenaciones as $valor => $etiqueta)
+                        <option value="{{ $valor }}" {{ request('orden') === $valor ? 'selected' : '' }}>{{ $etiqueta }}</option>
+                    @endforeach
+                </select>
+            </div>
 
-            {{-- Ordenación (feature 10) --}}
-            <select name="orden" class="bg-gray-900 border border-gray-700 text-white text-xs px-4 py-2 rounded focus:border-yellow-500 focus:outline-none transition-all">
-                @foreach($ordenaciones as $valor => $etiqueta)
-                    <option value="{{ $valor }}" {{ request('orden') === $valor ? 'selected' : '' }}>{{ $etiqueta }}</option>
-                @endforeach
-            </select>
+            <div class="grid grid-cols-2 sm:flex gap-2">
+                <input type="number" name="precio_min" min="0" step="0.01" value="{{ request('precio_min') }}"
+                       placeholder="€ mín" class="bg-gray-900 border border-gray-700 text-white text-xs px-3 py-2 rounded focus:border-yellow-500 focus:outline-none transition-all placeholder-gray-600">
+                <input type="number" name="precio_max" min="0" step="0.01" value="{{ request('precio_max') }}"
+                       placeholder="€ máx" class="bg-gray-900 border border-gray-700 text-white text-xs px-3 py-2 rounded focus:border-yellow-500 focus:outline-none transition-all placeholder-gray-600">
+            </div>
 
-            <button type="submit" class="px-5 py-2 border border-yellow-500 text-yellow-500 text-xs tracking-widest hover:bg-yellow-500 hover:text-black transition-all">Filtrar</button>
-            @if(request()->hasAny(['buscar','categoria','precio_min','precio_max','orden']))
-                <a href="{{ route('segundamano.index') }}" class="text-xs text-gray-500 hover:text-white transition-colors tracking-widest">Limpiar</a>
-            @endif
+            <div class="flex gap-2 items-center">
+                <button type="submit"
+                        class="flex-1 sm:flex-none px-4 sm:px-5 py-2 border border-yellow-500 text-yellow-500 text-xs tracking-widest hover:bg-yellow-500 hover:text-black transition-all">
+                    Filtrar
+                </button>
+                @if(request()->hasAny(['buscar','categoria','precio_min','precio_max','orden']))
+                    <a href="{{ route('segundamano.index') }}"
+                       class="text-xs text-gray-500 hover:text-white transition-colors tracking-widest whitespace-nowrap">
+                       Limpiar
+                    </a>
+                @endif
+            </div>
         </form>
     </div>
 
     {{-- Flash --}}
     @if(session('success'))
-        <div class="max-w-5xl mx-auto px-6 mb-6">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 mb-6">
             <div class="border border-yellow-500/40 bg-yellow-500/10 text-yellow-400 px-4 py-3 rounded text-xs tracking-wide">
                 {{ session('success') }}
             </div>
@@ -66,49 +87,39 @@
     @endif
 
     {{-- Grid de anuncios --}}
-    <div class="max-w-5xl mx-auto px-6">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
         @if($anuncios->count() > 0)
-            <div class="grid grid-cols-3 gap-5">
+            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5">
                 @foreach($anuncios as $anuncio)
-                    <a href="{{ route('segundamano.show', $anuncio->id) }}"
-                       class="group block no-underline">
-
-                        {{-- Imagen --}}
-                        <div class="relative overflow-hidden bg-gray-900 aspect-[4/3] mb-3">
+                    <a href="{{ route('segundamano.show', $anuncio->id) }}" class="group block no-underline">
+                        <div class="relative overflow-hidden bg-gray-900 aspect-[4/3] mb-2 sm:mb-3">
                             @php $portada = $anuncio->imagenPortada(); @endphp
                             @if($portada)
-                                <img src="{{ asset('storage/' . $portada) }}"
-                                     alt=""
+                                <img src="{{ asset('storage/' . $portada) }}" alt=""
                                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                             @else
-                                <div class="w-full h-full flex items-center justify-center text-gray-700 text-xs tracking-widest uppercase">
+                                <div class="w-full h-full flex items-center justify-center text-gray-700 text-[10px] tracking-widest uppercase">
                                     Sin imagen
                                 </div>
                             @endif
-
-                            {{-- Badge estado --}}
                             <span class="absolute top-2 left-2 px-2 py-0.5 text-[10px] tracking-widest uppercase
                                          bg-black/70 border border-white/10 text-gray-300 rounded">
                                 {{ $anuncio->etiquetaEstado() }}
                             </span>
-
-                            {{-- Overlay hover --}}
                             <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300"></div>
                         </div>
-
-                        {{-- Info --}}
                         <div>
-                            <h3 class="text-sm font-light tracking-wider mb-1 text-white truncate">
+                            <h3 class="text-xs sm:text-sm font-light tracking-wider mb-1 text-white truncate">
                                 {{ $anuncio->titulo }}
                             </h3>
-                            <p class="text-yellow-500 text-base font-light">
+                            <p class="text-yellow-500 text-sm sm:text-base font-light">
                                 €{{ number_format($anuncio->precio, 2) }}
                             </p>
                             <div class="flex items-center justify-between mt-1">
-                                <p class="text-gray-500 text-[10px] tracking-widest uppercase">
+                                <p class="text-gray-500 text-[10px] tracking-widest uppercase truncate">
                                     {{ $anuncio->categoria ?? '—' }}
                                 </p>
-                                <p class="text-gray-600 text-[10px]">
+                                <p class="text-gray-600 text-[10px] truncate ml-1">
                                     {{ $anuncio->vendedor->name }}
                                 </p>
                             </div>
@@ -117,17 +128,15 @@
                 @endforeach
             </div>
 
-            {{-- Paginación --}}
             <div class="mt-10 flex justify-center gap-2 text-xs">
                 {{ $anuncios->links() }}
             </div>
         @else
-            <div class="text-center py-20">
+            <div class="text-center py-16">
                 <p class="text-gray-600 text-lg tracking-wider">No hay anuncios disponibles</p>
                 @auth
                     <a href="{{ route('segundamano.crear') }}"
-                       class="inline-block mt-4 px-6 py-2 border border-yellow-500 text-yellow-500 text-xs tracking-widest
-                              hover:bg-yellow-500 hover:text-black transition-all">
+                       class="inline-block mt-4 px-6 py-2 border border-yellow-500 text-yellow-500 text-xs tracking-widest hover:bg-yellow-500 hover:text-black transition-all">
                         Sé el primero en publicar
                     </a>
                 @endauth

@@ -1,17 +1,17 @@
 @extends('taller.layout')
 
 @section('content')
-<div class="max-w-2xl">
+<div class="max-w-2xl w-full">
 
-    <h1 class="text-2xl font-bold tracking-widest uppercase text-white mb-1">Nueva cita</h1>
-    <p class="text-sm text-white/40 mb-8">Rellena el formulario y nos pondremos en contacto contigo.</p>
+    <h1 class="text-xl sm:text-2xl font-bold tracking-widest uppercase text-white mb-1">Nueva cita</h1>
+    <p class="text-sm text-white/40 mb-6 sm:mb-8">Rellena el formulario y nos pondremos en contacto contigo.</p>
 
     <form action="{{ route('taller.guardar') }}" method="POST" enctype="multipart/form-data"
-          class="flex flex-col gap-6">
+          class="flex flex-col gap-5 sm:gap-6">
         @csrf
 
         {{-- Marca / Modelo --}}
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
                 <label class="field-label">Marca *</label>
                 <input type="text" name="marca" value="{{ old('marca') }}" placeholder="Honda, KTM…"
@@ -30,15 +30,13 @@
         <div>
             <label class="field-label">Matrícula *</label>
             <input type="text" name="matricula" value="{{ old('matricula') }}" placeholder="1234 ABC"
-                   class="field-input w-48 @error('matricula') border-red-500 @enderror">
+                   class="field-input w-full sm:w-48 @error('matricula') border-red-500 @enderror">
             @error('matricula') <p class="field-error">{{ $message }}</p> @enderror
         </div>
 
         {{-- Fecha y hora de la cita --}}
         <div x-data="agendaPicker(@js($agenda), '{{ old('fecha_cita') }}')">
             <label class="field-label">Fecha y hora de la cita *</label>
-
-            {{-- input oculto que se envía con el formulario --}}
             <input type="hidden" name="fecha_cita" :value="seleccion">
 
             <template x-if="dias.length === 0">
@@ -48,7 +46,6 @@
             </template>
 
             <div x-show="dias.length > 0" x-cloak>
-                {{-- Días --}}
                 <p class="text-[11px] text-white/30 uppercase tracking-wider mb-2">1 · Elige un día</p>
                 <div class="flex gap-2 overflow-x-auto pb-2">
                     <template x-for="d in dias" :key="d.fecha">
@@ -58,11 +55,10 @@
                     </template>
                 </div>
 
-                {{-- Horas --}}
                 <template x-if="diaActivo">
                     <div class="mt-4">
                         <p class="text-[11px] text-white/30 uppercase tracking-wider mb-2">2 · Elige una hora</p>
-                        <div class="grid grid-cols-4 sm:grid-cols-6 gap-2">
+                        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
                             <template x-for="h in slots" :key="h.hora">
                                 <button type="button" @click="!h.ocupado && elegirHora(h.hora)"
                                         :disabled="h.ocupado"
@@ -74,7 +70,6 @@
                     </div>
                 </template>
 
-                {{-- Resumen --}}
                 <p class="text-sm mt-4" x-show="resumen" x-cloak>
                     <span class="text-white/40">Cita seleccionada:</span>
                     <span class="text-[#f0c36d] font-semibold" x-text="resumen"></span>
@@ -109,7 +104,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                           d="M3 16.5V19a1.5 1.5 0 001.5 1.5h15A1.5 1.5 0 0021 19v-2.5M12 3v12m0-12l-3.5 3.5M12 3l3.5 3.5"/>
                 </svg>
-                <span class="text-xs text-white/40" id="foto-label">Arrastra o haz clic para subir fotos</span>
+                <span class="text-xs text-white/40 text-center px-4" id="foto-label">Arrastra o pulsa para subir fotos</span>
             </label>
             <input type="file" id="fotos" name="fotos[]" multiple accept="image/*" class="hidden"
                    onchange="document.getElementById('foto-label').textContent = this.files.length + ' archivo(s) seleccionado(s)'">
@@ -117,8 +112,8 @@
         </div>
 
         <button type="submit"
-                class="self-start px-8 py-3 bg-[#f0c36d] text-black text-sm font-bold uppercase tracking-widest
-                       rounded hover:bg-[#e0b35d] transition-colors">
+                class="w-full sm:w-auto self-start px-8 py-3 bg-[#f0c36d] text-black text-sm font-bold uppercase tracking-widest
+                       rounded hover:bg-[#e0b35d] active:scale-[0.98] transition-all">
             Solicitar cita
         </button>
     </form>

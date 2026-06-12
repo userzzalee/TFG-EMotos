@@ -13,29 +13,30 @@
 
 <div class="fixed inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900 z-0 pointer-events-none"></div>
 
-<main class="relative z-10 text-white flex">
-    
-    <!--Panel imagen (fijo a la izquierda)-->
-    <div class="w-2/3 h-screen sticky top-0 flex items-center justify-center">
+<main class="relative z-10 text-white flex flex-col lg:flex-row min-h-screen pt-[60px]">
+
+    {{-- Panel imagen: fijo en escritorio, estático y más pequeño en móvil --}}
+    <div class="w-full lg:w-2/3 lg:h-screen lg:sticky lg:top-0 flex items-center justify-center
+                h-[40vh] min-h-[220px]">
         <div id="moto-preview" class="w-full h-full flex items-center justify-center transition-all duration-500">
-            <img id="moto-emoji" src="{{ asset('images/40hpgrispng.png') }}" alt="Moto" class="w-[82%] h-[82%] object-contain transition-all duration-300">
+            <img id="moto-emoji" src="{{ asset('images/40hpgrispng.png') }}" alt="Moto"
+                 class="w-[80%] h-[80%] object-contain transition-all duration-300 max-h-[300px] lg:max-h-none">
         </div>
     </div>
-    
-    <!-- Panel derecho (scroll continuo) -->
-    <div id="options-panel" class="w-1/3 bg-black/80 backdrop-blur-xl border-l border-gray-800">
-        
-        <!-- Cabecera -->
-        <div class="pt-[80px] pb-6 px-6 text-center border-b border-gray-800">
-            <h1 class="text-xl font-semibold text-yellow-500">Configura tu Moto</h1>
+
+    {{-- Panel opciones --}}
+    <div id="options-panel" class="w-full lg:w-1/3 bg-black/80 backdrop-blur-xl border-t lg:border-t-0 lg:border-l border-gray-800">
+
+        <div class="py-6 px-4 sm:px-6 text-center border-b border-gray-800">
+            <h1 class="text-lg sm:text-xl font-semibold text-yellow-500">Configura tu Moto</h1>
             <p class="text-gray-400 text-sm mt-1">Personaliza cada detalle</p>
         </div>
 
-        <!-- Seccion Modelo -->
-        <div class="px-6 py-24 border-b border-gray-800">
+        {{-- Modelo --}}
+        <div class="px-4 sm:px-6 py-8 sm:py-12 border-b border-gray-800">
             <p class="text-[10px] tracking-[0.3em] text-yellow-500 uppercase mb-1">Paso 1</p>
-            <h2 class="text-lg font-semibold mb-1">Modelo</h2>
-            <p class="text-gray-400 text-sm mb-5">Elige tu modelo base</p>
+            <h2 class="text-base sm:text-lg font-semibold mb-1">Modelo</h2>
+            <p class="text-gray-400 text-sm mb-4 sm:mb-5">Elige tu modelo base</p>
             <div class="space-y-2">
                 <button onclick="seleccionarModelo('enduro')" class="models w-full bg-gray-800 text-white rounded-lg py-3 px-4 text-left hover:bg-gray-700 transition-all border border-gray-700" data-model="enduro">
                     <div class="flex justify-between items-center">
@@ -58,11 +59,11 @@
             </div>
         </div>
 
-        <!-- Seccion Motor -->
-        <div class="px-6 py-24 border-b border-gray-800">
+        {{-- Motor --}}
+        <div class="px-4 sm:px-6 py-8 sm:py-12 border-b border-gray-800">
             <p class="text-[10px] tracking-[0.3em] text-yellow-500 uppercase mb-1">Paso 2</p>
-            <h2 class="text-lg font-semibold mb-1">Potencia</h2>
-            <p class="text-gray-400 text-sm mb-5">Elige la potencia</p>
+            <h2 class="text-base sm:text-lg font-semibold mb-1">Potencia</h2>
+            <p class="text-gray-400 text-sm mb-4 sm:mb-5">Elige la potencia</p>
             <div class="space-y-2">
                 <button onclick="seleccionarMotor('40')" class="engines w-full bg-gray-800 text-white rounded-lg py-3 px-4 text-left hover:bg-gray-700 transition-all border border-gray-700" data-engine="40">
                     <div class="flex justify-between items-center">
@@ -85,11 +86,11 @@
             </div>
         </div>
 
-        <!-- Seccion Color -->
-        <div class="px-6 py-24 border-b border-gray-800">
+        {{-- Color --}}
+        <div class="px-4 sm:px-6 py-8 sm:py-12 border-b border-gray-800">
             <p class="text-[10px] tracking-[0.3em] text-yellow-500 uppercase mb-1">Paso 3</p>
-            <h2 class="text-lg font-semibold mb-1">Color</h2>
-            <p class="text-gray-400 text-sm mb-5">Elige el acabado</p>
+            <h2 class="text-base sm:text-lg font-semibold mb-1">Color</h2>
+            <p class="text-gray-400 text-sm mb-4 sm:mb-5">Elige el acabado</p>
             <div class="flex gap-4 justify-center">
                 <button onclick="seleccionarColor('gris')" class="colors w-12 h-12 rounded-full bg-gray-500 hover:scale-110 transition-transform border-2 border-transparent hover:border-yellow-500" data-color="gris"></button>
                 <button onclick="seleccionarColor('dorado')" class="colors w-12 h-12 rounded-full bg-yellow-500 hover:scale-110 transition-transform border-2 border-transparent hover:border-yellow-500" data-color="dorado"></button>
@@ -98,10 +99,10 @@
             <p id="color-label" class="text-center text-sm text-gray-400 mt-3">Gris</p>
         </div>
 
-        <!-- Resumen -->
-        <div class="px-6 py-8">
+        {{-- Resumen --}}
+        <div class="px-4 sm:px-6 py-6 sm:py-8">
             <p class="text-[10px] tracking-[0.3em] text-yellow-500 uppercase mb-1">Resumen</p>
-            <h2 class="text-lg font-semibold mb-4">Tu configuración</h2>
+            <h2 class="text-base sm:text-lg font-semibold mb-4">Tu configuración</h2>
             <div class="space-y-2 mb-6">
                 <div class="flex justify-between text-sm">
                     <span class="text-gray-400">Modelo</span>
@@ -119,7 +120,7 @@
             <div class="pt-4 border-t border-gray-700">
                 <div class="flex justify-between items-center mb-5">
                     <span class="text-gray-400 text-sm">Precio total</span>
-                    <span id="total-price" class="text-2xl font-semibold text-yellow-500">€4.999</span>
+                    <span id="total-price" class="text-xl sm:text-2xl font-semibold text-yellow-500">€4.999</span>
                 </div>
                 <form id="add-to-cart-form" action="{{ route('cart.add-config') }}" method="POST">
                     @csrf
@@ -127,13 +128,16 @@
                     <input type="hidden" name="color" id="config-color" value="gris">
                     <input type="hidden" name="motor" id="config-motor" value="40">
                     <input type="hidden" name="precio" id="config-precio" value="4999">
-                    <button type="submit" class="w-full bg-yellow-500 text-black rounded-lg py-3 font-medium hover:bg-yellow-400 transition-all text-sm" onclick="this.disabled=true;this.form.submit();">Añadir al carrito</button>
+                    <button type="submit"
+                            class="w-full bg-yellow-500 text-black rounded-lg py-3 font-medium hover:bg-yellow-400 active:scale-[0.98] transition-all text-sm"
+                            onclick="this.disabled=true;this.form.submit();">
+                        Añadir al carrito
+                    </button>
                 </form>
             </div>
         </div>
 
     </div>
-    
 </main>
 
 </body>

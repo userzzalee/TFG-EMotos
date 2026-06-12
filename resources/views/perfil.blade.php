@@ -6,13 +6,13 @@
     <title>Perfil</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body>
+<body class="min-h-screen bg-black">
 
 @include('layouts.navigation')
 
-<div class="min-h-screen bg-black flex flex-col items-center justify-center pt-[60px]">
+<div class="min-h-screen bg-black flex flex-col items-center justify-center pt-[60px] px-4 py-8">
 
-    <div class="bg-[rgb(30,30,30)]/90 text-center p-4 w-[35%] text-white mt-0 rounded-lg border border-gray-700/50">
+    <div class="bg-[rgb(30,30,30)]/90 text-center p-4 sm:p-6 w-full max-w-sm sm:max-w-md text-white rounded-lg border border-gray-700/50">
 
         <h1 class="text-lg font-bold mb-2 uppercase tracking-widest">Mi Perfil</h1>
         <hr class="border-gray-700 mb-4">
@@ -31,7 +31,7 @@
         <div class="text-left space-y-2 mb-4">
             <div class="bg-black p-3 rounded-lg">
                 <p class="text-gray-500 text-[10px] uppercase tracking-widest mb-0.5">Correo electrónico</p>
-                <p class="text-white text-sm">{{ Auth::user()->email }}</p>
+                <p class="text-white text-sm break-all">{{ Auth::user()->email }}</p>
             </div>
             @if(Auth::user()->telefono)
             <div class="bg-black p-3 rounded-lg">
@@ -45,31 +45,29 @@
             </div>
         </div>
 
-        <div class="flex gap-3 justify-center">
+        <div class="flex flex-wrap gap-2 justify-center">
             <a href="{{ route('order.index') }}"
-               class="w-[120px] h-[32px] text-white bg-gray-700 hover:bg-gray-600 font-medium rounded-[20px] cursor-pointer border-none transition-colors text-xs flex items-center justify-center">
+               class="px-4 h-[32px] text-white bg-gray-700 hover:bg-gray-600 font-medium rounded-[20px] transition-colors text-xs flex items-center justify-center">
                 Mis Pedidos
             </a>
             @if(Auth::user()->esAdmin())
                 <a href="{{ url('/admin/usuarios') }}"
-                   class="w-[120px] h-[32px] text-white bg-gray-700 hover:bg-gray-600 font-medium rounded-[20px] cursor-pointer border-none transition-colors text-xs flex items-center justify-center">
+                   class="px-4 h-[32px] text-white bg-gray-700 hover:bg-gray-600 font-medium rounded-[20px] transition-colors text-xs flex items-center justify-center">
                     Panel Admin
                 </a>
             @endif
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit"
-                        class="w-[120px] h-[32px] text-white bg-[#c9b37e] hover:bg-[#e0c97a] text-[#1e1f29] font-medium rounded-[20px] cursor-pointer border-none transition-colors text-xs">
+                        class="px-4 h-[32px] text-[#1e1f29] bg-[#c9b37e] hover:bg-[#e0c97a] font-medium rounded-[20px] transition-colors text-xs">
                     Cerrar sesión
                 </button>
             </form>
         </div>
-
     </div>
 
     <div class="mt-3">
-        <a href="{{ url('/') }}"
-            class="text-gray-400 no-underline hover:text-white transition-colors text-xs">
+        <a href="{{ url('/') }}" class="text-gray-400 no-underline hover:text-white transition-colors text-xs">
             Volver al inicio
         </a>
     </div>

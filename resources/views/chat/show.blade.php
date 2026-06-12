@@ -20,20 +20,20 @@
     </div>
 </div>
 
-{{-- Contenedor del chat en tiempo real --}}
+{{-- Contenedor chat --}}
 <div id="chat-app"
      data-conversacion-id="{{ $conversacion->id }}"
      class="flex flex-col"
      style="height: calc(100dvh - 180px); min-height: 300px;">
 
-    {{-- Burbuja de mensajes --}}
+    {{-- Mensajes --}}
     <div id="chat-box" class="flex flex-col gap-2 overflow-y-auto flex-1 pr-1 mb-3">
 
         @if($mensajes->hasMorePages())
-            <div class="text-center mb-1">
-                <a href="{{ $mensajes->url($mensajes->currentPage() + 1) }}"
+            <div class="text-center mb-2">
+                <a href="{{ $mensajes->nextPageUrl() }}"
                    class="text-xs text-white/40 hover:text-[#f0c36d] transition-colors">
-                   Cargar mensajes anteriores
+                   ↑ Cargar mensajes anteriores
                 </a>
             </div>
         @endif
@@ -56,7 +56,7 @@
         @endforelse
     </div>
 
-    {{-- Formulario de envío --}}
+    {{-- Formulario --}}
     <div class="shrink-0 pb-2">
         <form id="chat-form"
               action="{{ route('chat.enviar', $conversacion->id) }}"
@@ -66,18 +66,17 @@
             <input
                 type="text"
                 name="contenido"
+                id="chat-input"
                 autocomplete="off"
                 autofocus
                 placeholder="Escribe un mensaje..."
                 required
-                class="flex-1 min-w-0 bg-white/5 border {{ $errors->has('contenido') ? 'border-red-500/50' : 'border-white/10' }}
+                class="flex-1 min-w-0 bg-white/5 border border-white/10
                        rounded-[8px] px-3 py-2.5 text-xs text-gray-200 placeholder-white/25
-                       focus:outline-none focus:border-[#f0c36d]/40 focus:bg-white/8 transition-colors"
+                       focus:outline-none focus:border-[#f0c36d]/40 transition-colors"
             >
-            @error('contenido')
-                <p class="text-[10px] text-red-400 mt-1">{{ $message }}</p>
-            @enderror
             <button type="submit"
+                    id="chat-submit"
                     class="px-4 py-2.5 rounded-[8px] bg-[#f0c36d]/15 border border-[#f0c36d]/30
                            text-[#f0c36d] text-xs uppercase tracking-widest font-bold
                            hover:bg-[#f0c36d]/25 hover:border-[#f0c36d]/50
@@ -90,10 +89,126 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const chatBox = document.getElementById('chat-box');
-        if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
+(function () {
+    const box     = document.getElementById('chat-box');
+    const form    = document.getElementById('chat-form');
+    const input   = document.getElementById('chat-input');
+    const btn     = document.getElementById('chat-submit');
+    const app     = document.getElementById('chat-app');
+    const yo      = {{ $userId }};
+    const convId  = {{ $conversacion->id }};
+    const csrf    = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+
+    // Ir al fondo inmediatamente, sin animación
+    box.scrollTop = box.scrollHeight;
+
+    window.__conversacionAbierta = convId;
+
+    // Crear burbuja de mensaje
+    function burbuja(contenido, hora, esMio, id) {
+        const fila = document.createElement('div');
+        fila.className = 'flex ' + (esMio ? 'justify-end' : 'justify-start');
+        if (id) fila.dataset.msgId = id;
+
+        const bbl = document.createElement('div');
+        bbl.className = 'max-w-[85%] sm:max-w-[70%] px-3 py-2 rounded-[10px] text-xs leading-relaxed ' +
+            (esMio
+                ? 'bg-[#f0c36d]/15 border border-[#f0c36d]/25 text-[#f0c36d]'
+                : 'bg-white/5 border border-white/10 text-gray-300');
+
+        const p = document.createElement('p');
+        p.className = 'break-words';
+        p.textContent = contenido;
+
+        const h = document.createElement('p');
+        h.className = 'text-right mt-1 opacity-40 text-[10px]';
+        h.textContent = hora;
+
+        bbl.append(p, h);
+        fila.append(bbl);
+        return fila;
+    }
+
+    function yaPintado(id) {
+        return id && box.querySelector('[data-msg-id="' + id + '"]');
+    }
+
+    function añadir(contenido, hora, esMio, id) {
+        if (yaPintado(id)) return;
+        document.getElementById('chat-vacio')?.remove();
+        box.appendChild(burbuja(contenido, hora, esMio, id));
+        box.scrollTop = box.scrollHeight;
+    }
+
+    // WebSocket — recibir mensajes al instante
+    if (window.Echo) {
+        window.Echo.private('conversacion.' + convId).listen('.mensaje.enviado', function (e) {
+            añadir(e.contenido, e.hora, e.remitente_id === yo, e.id);
+
+            if (e.remitente_id !== yo) {
+                fetch('/chat/' + convId + '/leer', {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': csrf, 'X-Requested-With': 'XMLHttpRequest', Accept: 'application/json' },
+                }).then(r => r.json()).then(d => {
+                    const badge = document.getElementById('chat-badge');
+                    if (badge) badge.style.display = d.no_leidos > 0 ? 'block' : 'none';
+                }).catch(() => {});
+            }
+        });
+    }
+
+    // Enviar mensaje por AJAX — aparece al instante sin esperar respuesta del servidor
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const texto = input.value.trim();
+        if (!texto) return;
+
+        // Pintar la burbuja YA, antes de enviar al servidor (optimistic UI)
+        const ahora = new Date();
+        const hora  = ahora.getHours().toString().padStart(2, '0') + ':' + ahora.getMinutes().toString().padStart(2, '0');
+        input.value = '';
+        input.focus();
+        btn.disabled = true;
+
+        añadir(texto, hora, true, null);
+
+        try {
+            const res = await fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrf,
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-Socket-ID': window.Echo ? window.Echo.socketId() : '',
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+                body: JSON.stringify({ contenido: texto }),
+            });
+
+            if (!res.ok) throw new Error('fail');
+
+            const data = await res.json();
+            // Actualizar el data-msg-id de la burbuja optimista (la última sin id)
+            const sinId = [...box.querySelectorAll('[data-msg-id=""]')].pop()
+                       || [...box.querySelectorAll('.justify-end:not([data-msg-id])')].pop();
+            if (sinId) sinId.dataset.msgId = data.id;
+
+        } catch {
+            // Si falla, devolver el texto al input
+            input.value = texto;
+        } finally {
+            btn.disabled = false;
+        }
     });
+
+    // Enter para enviar
+    input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        }
+    });
+})();
 </script>
 
 @endsection
