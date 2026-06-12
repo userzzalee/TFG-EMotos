@@ -28,7 +28,7 @@
                             <div class="text-right">
                                 <p class="text-yellow-500 font-bold">€{{ number_format($order->total, 2) }}</p>
                                 <p class="text-xs mt-1 {{ $order->status === 'completed' ? 'text-green-400' : 'text-gray-400' }}">
-                                    {{ ucfirst($order->status) }}
+                                    {{ match($order->status) { 'pending' => 'Pendiente', 'completed' => 'Completado', 'cancelled' => 'Cancelado', default => ucfirst($order->status) } }}
                                 </p>
                             </div>
                         </div>

@@ -31,7 +31,7 @@ class AgendaTaller
         // Solo cuentan las citas activas (no pagadas ni canceladas).
         $ocupacion = CitaTaller::whereNotNull('fecha_cita')
             ->whereBetween('fecha_cita', [$ahora->copy()->startOfDay(), $hasta])
-            ->whereIn('estado', ['pendiente', 'aceptada', 'en_proceso', 'finalizada'])
+            ->whereIn('estado', ['pendiente', 'aceptada', 'en_proceso'])
             ->get(['fecha_cita'])
             ->groupBy(fn ($c) => $c->fecha_cita->format('Y-m-d H:i'))
             ->map->count();
@@ -120,7 +120,7 @@ class AgendaTaller
         $capacidad = (int) config('taller.capacidad_slot', 1);
         $ocupados = CitaTaller::whereNotNull('fecha_cita')
             ->where('fecha_cita', $fechaHora->format('Y-m-d H:i:00'))
-            ->whereIn('estado', ['pendiente', 'aceptada', 'en_proceso', 'finalizada'])
+            ->whereIn('estado', ['pendiente', 'aceptada', 'en_proceso'])
             ->count();
 
         return $ocupados < $capacidad;

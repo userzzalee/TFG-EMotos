@@ -111,6 +111,9 @@
             background: #f0c36d;
             color: #111;
             font-weight: bold;
+            vertical-align: baseline;
+            position: relative;
+            top: 6px;
         }
 
         .footer {

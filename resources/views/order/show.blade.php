@@ -33,7 +33,7 @@
             <div class="space-y-3 text-sm">
                 <div>
                     <p class="text-gray-400 text-xs">Estado</p>
-                    <p class="font-medium">{{ ucfirst($order->status) }}</p>
+                    <p class="font-medium">{{ match($order->status) { 'pending' => 'Pendiente', 'completed' => 'Completado', 'cancelled' => 'Cancelado', default => ucfirst($order->status) } }}</p>
                 </div>
                 <div>
                     <p class="text-gray-400 text-xs">Fecha</p>

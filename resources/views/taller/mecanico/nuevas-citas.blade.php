@@ -23,7 +23,7 @@
                     <p class="text-white font-semibold text-sm">{{ $cita->marca }} {{ $cita->modelo }}</p>
                     <p class="text-white/40 text-xs">{{ $cita->matricula }} · {{ $cita->usuario->name }} · {{ $cita->created_at->diffForHumans() }}</p>
                     @if($cita->fecha_cita)
-                        <p class="text-[#f0c36d] text-xs mt-0.5">📅 {{ $cita->fechaCitaLegible() }}</p>
+                        <p class="text-[#f0c36d] text-xs mt-0.5">{{ $cita->fechaCitaLegible() }}</p>
                     @endif
                 </div>
             </div>

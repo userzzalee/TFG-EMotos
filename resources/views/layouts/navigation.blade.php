@@ -18,7 +18,7 @@
         <a href="{{ route('segundamano.index') }}" class="text-[#ddd] no-underline text-[12px] uppercase tracking-widest hover:text-[#f0c36d] transition-colors">Segunda Mano</a>
         @auth
             @if(Auth::user()->esAdmin())
-                <a href="{{ route('admin.dashboard') }}" class="text-[#f0c36d] no-underline text-[12px] uppercase tracking-widest hover:text-yellow-300 transition-colors">Admin</a>
+                <a href="{{ route('admin.dashboard') }}" class="text-[#f0c36d] no-underline text-[12px] uppercase tracking-widest hover:text-yellow-300 transition-colors">Panel</a>
             @endif
         @endauth
     </div>
