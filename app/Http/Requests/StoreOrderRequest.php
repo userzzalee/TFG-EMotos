@@ -16,8 +16,8 @@ class StoreOrderRequest extends FormRequest
         return [
             'shipping_address' => 'required|string|min:10|max:255',
             'shipping_city' => 'required|string|min:2|max:100',
-            'shipping_postal_code' => 'required|string|regex:/^[0-9]{5}$/',
-            'shipping_phone' => 'required|string|regex:/^(\+34|0034)?[6-9][0-9]{8}$/',
+            'shipping_postal_code' => ['required', 'string', 'regex:/^[0-9]{5}$/'],
+            'shipping_phone' => ['required', 'string', 'regex:/^(\+34|0034)?[6-9][0-9]{8}$/'],
             'payment_method' => 'required|string|in:card,cash',
         ];
     }

@@ -25,9 +25,10 @@ class SegundaManoController extends Controller
         }
 
         if ($request->filled('buscar')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('titulo', 'like', '%' . $request->buscar . '%')
-                  ->orWhere('descripcion', 'like', '%' . $request->buscar . '%');
+            $term = mb_strtolower($request->buscar);
+            $query->where(function ($q) use ($term) {
+                $q->whereRaw('LOWER(titulo) LIKE ?', ["%{$term}%"])
+                  ->orWhereRaw('LOWER(descripcion) LIKE ?', ["%{$term}%"]);
             });
         }
 

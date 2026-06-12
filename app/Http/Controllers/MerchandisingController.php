@@ -18,9 +18,10 @@ class MerchandisingController extends Controller
         $query = Producto::where('activo', true);
 
         if ($busqueda) {
-            $query->where(function ($q) use ($busqueda) {
-                $q->where('nombre', 'like', "%{$busqueda}%")
-                  ->orWhere('descripcion', 'like', "%{$busqueda}%");
+            $term = mb_strtolower($busqueda);
+            $query->where(function ($q) use ($term) {
+                $q->whereRaw('LOWER(nombre) LIKE ?', ["%{$term}%"])
+                  ->orWhereRaw('LOWER(descripcion) LIKE ?', ["%{$term}%"]);
             });
         }
 

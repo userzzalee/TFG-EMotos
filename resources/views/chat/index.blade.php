@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="mb-6">
+<div class="mb-5 sm:mb-6">
     <h1 class="text-base font-bold tracking-widest uppercase text-white mb-1">Mis conversaciones</h1>
     <p class="text-xs text-white/40">Mensajes con compradores y vendedores.</p>
 </div>
@@ -21,16 +21,17 @@
             @endphp
 
             <a href="{{ route('chat.show', $conv->id) }}"
-                class="flex items-center justify-between gap-4 bg-[#111] border border-white/10 rounded-[10px] px-4 py-3
-                    no-underline transition-all duration-200 hover:border-[rgba(240,195,109,0.35)] hover:-translate-y-0.5 group">
+               class="flex items-center justify-between gap-3 bg-[#111] border border-white/10 rounded-[10px] px-3 sm:px-4 py-3
+                      no-underline transition-all duration-200 hover:border-[rgba(240,195,109,0.35)] hover:-translate-y-0.5 group
+                      active:scale-[0.99]">
 
-                {{-- Avatar inicial + nombre --}}
-                <div class="flex items-center gap-3 min-w-0">
+                {{-- Avatar + nombre --}}
+                <div class="flex items-center gap-3 min-w-0 flex-1">
                     <div class="w-9 h-9 rounded-full bg-[#f0c36d]/10 border border-[#f0c36d]/20 flex items-center justify-center
                                 text-[#f0c36d] text-xs font-bold uppercase shrink-0">
                         {{ mb_substr($otro->name, 0, 1) }}
                     </div>
-                    <div class="min-w-0">
+                    <div class="min-w-0 flex-1">
                         <p class="text-xs font-bold uppercase tracking-widest text-gray-200 truncate">
                             {{ $otro->name }}
                             @if($conv->tituloArticulo())
@@ -40,7 +41,7 @@
                             @endif
                         </p>
                         <p class="text-xs text-white/40 truncate mt-0.5">
-                            {{ $ultimo ? Str::limit($ultimo->contenido, 60) : 'Sin mensajes aún' }}
+                            {{ $ultimo ? Str::limit($ultimo->contenido, 50) : 'Sin mensajes aún' }}
                         </p>
                     </div>
                 </div>
@@ -52,7 +53,7 @@
                             {{ $noLeidos }}
                         </span>
                     @endif
-                    <span class="text-[10px] text-white/25">
+                    <span class="text-[10px] text-white/25 whitespace-nowrap">
                         {{ $conv->ultimo_mensaje_at?->diffForHumans() }}
                     </span>
                 </div>

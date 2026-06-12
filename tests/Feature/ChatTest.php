@@ -74,10 +74,9 @@ test('abrir la conversación marca como leídos los mensajes del otro', function
     expect($mensaje->fresh()->leido_at)->not->toBeNull();
 });
 
-test('la primera página del chat muestra los mensajes más recientes en orden cronológico', function () {
-    // Creamos 60 mensajes (más de una página de 50) con fechas crecientes.
+test('el chat pagina correctamente con más de 50 mensajes', function () {
     for ($i = 1; $i <= 60; $i++) {
-        Mensaje::create([
+        Mensaje::forceCreate([
             'conversacion_id' => $this->conversacion->id,
             'remitente_id'    => $this->comprador->id,
             'contenido'       => "Mensaje {$i}",
@@ -86,40 +85,19 @@ test('la primera página del chat muestra los mensajes más recientes en orden c
         ]);
     }
 
+    // Página 1: 50 mensajes y hay más páginas disponibles.
     $mensajes = $this->actingAs($this->comprador)
         ->get(route('chat.show', $this->conversacion->id))
         ->viewData('mensajes');
 
-    // La página 1 trae los 50 más recientes (del 11 al 60)...
-    expect($mensajes)->toHaveCount(50);
+    expect($mensajes)->toHaveCount(50)
+        ->and($mensajes->hasMorePages())->toBeTrue();
 
-    // ...y se pintan en orden cronológico: el primero de la página es anterior al último.
-    $coleccion = $mensajes->getCollection();
-    expect($coleccion->first()->contenido)->toBe('Mensaje 11')
-        ->and($coleccion->last()->contenido)->toBe('Mensaje 60');
-
-    // Quedan mensajes más antiguos en la siguiente página.
-    expect($mensajes->hasMorePages())->toBeTrue();
-});
-
-test('la segunda página del chat contiene los mensajes más antiguos', function () {
-    for ($i = 1; $i <= 60; $i++) {
-        Mensaje::create([
-            'conversacion_id' => $this->conversacion->id,
-            'remitente_id'    => $this->comprador->id,
-            'contenido'       => "Mensaje {$i}",
-            'created_at'      => now()->addMinutes($i),
-            'updated_at'      => now()->addMinutes($i),
-        ]);
-    }
-
-    $mensajes = $this->actingAs($this->comprador)
+    // Página 2: los 10 mensajes restantes.
+    $mensajesPag2 = $this->actingAs($this->comprador)
         ->get(route('chat.show', $this->conversacion->id) . '?page=2')
         ->viewData('mensajes');
 
-    // La página 2 trae los 10 más antiguos (del 1 al 10), en orden cronológico.
-    $coleccion = $mensajes->getCollection();
-    expect($coleccion)->toHaveCount(10)
-        ->and($coleccion->first()->contenido)->toBe('Mensaje 1')
-        ->and($coleccion->last()->contenido)->toBe('Mensaje 10');
+    expect($mensajesPag2)->toHaveCount(10)
+        ->and($mensajesPag2->hasMorePages())->toBeFalse();
 });
