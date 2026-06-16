@@ -1,1 +1,40 @@
 @import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/* Chat: animación de entrada y estados de envío de las burbujas       */
+/* ------------------------------------------------------------------ */
+
+@keyframes chat-aparece {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.chat-entra {
+    animation: chat-aparece 0.18s ease-out;
+}
+
+/* Mensaje propio en vuelo (aún sin confirmar por el servidor) */
+.chat-pendiente {
+    opacity: 0.55;
+}
+
+/* Mensaje que falló al enviarse */
+.chat-fallido > div {
+    border-color: rgba(239, 68, 68, 0.55) !important;
+}
+
+.chat-fallido > div::after {
+    content: "⚠ no enviado";
+    display: block;
+    margin-top: 2px;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgb(248, 113, 113);
+    text-align: right;
+}
+
+/* Respeta a quien prefiere menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+    .chat-entra { animation: none; }
+}
