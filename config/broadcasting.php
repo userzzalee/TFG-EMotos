@@ -52,7 +52,7 @@ return [
                 'useTLS' => env('PUSHER_SCHEME', 'https') === 'https',
             ],
             'client_options' => [
-                // Guzzle client options
+                'verify' => env('PUSHER_SSL_VERIFY', true),
             ],
         ],
 

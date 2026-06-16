@@ -75,7 +75,7 @@ class ChatController extends Controller
         // chat) y "Cargar mensajes anteriores" avanza a páginas superiores con
         // mensajes cada vez más antiguos. Luego invertimos la colección de cada
         // página para pintarla en orden cronológico (antiguo arriba, nuevo abajo).
-        $mensajes = $conversacion->mensajes()->with('remitente')->latest()->paginate(50);
+        $mensajes = $conversacion->mensajes()->with('remitente')->reorder()->latest()->paginate(50);
         $mensajes->setCollection($mensajes->getCollection()->reverse()->values());
 
         $otro     = $conversacion->otroParticipante($userId);
